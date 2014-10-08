@@ -36,7 +36,6 @@ namespace MalnatiProject
             //serverList.Add(new ServerWindow("192.168.1.21", 6000, "ciao"));
             //serverList.Add(new ServerWindow("192.168.1.22", 6001, "ciao1"));
             lServers.ItemsSource=serverList;
-
         }
 
 
@@ -49,8 +48,6 @@ namespace MalnatiProject
             AddServer add = new AddServer();
             add.Show();
             add.rif = this;
-
-
 
         }
 

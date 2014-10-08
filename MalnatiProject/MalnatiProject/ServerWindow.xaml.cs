@@ -109,6 +109,8 @@ namespace MalnatiProject
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
+            Point p = e.GetPosition(this);
+            Console.WriteLine(p.ToString());
             byte[] string_send = Encoding.UTF8.GetBytes(e.GetPosition(this).ToString() + ";");
             Console.WriteLine("You moved me at " + e.GetPosition(this).ToString());
             //s.Send(string_send);
