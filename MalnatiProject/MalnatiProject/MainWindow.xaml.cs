@@ -54,7 +54,7 @@ namespace MalnatiProject
             if (list_servers.Count == 0) { MessageBox.Show("Lista servers vuota"); }
             else
             {
-                ElencoServers elenco = new ElencoServers();
+                ElencoServers elenco = new ElencoServers(); //ciao
                 elenco.Show();
                 elenco.PassArgument(list_servers);
             }

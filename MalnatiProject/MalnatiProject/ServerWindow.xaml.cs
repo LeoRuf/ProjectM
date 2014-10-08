@@ -48,7 +48,7 @@ namespace MalnatiProject
 
         public String ToString()
         {
-            return this.ip + "    " + this.porta;
+            return this.ip + "    " + this.porta; //tostring
 
         }
 
