@@ -16,25 +16,18 @@
                 <GradientStop Color="#FF094E6E" Offset="0.91"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <Button x:Name="aggiungi_button" Content="Aggiungi Server" HorizontalAlignment="Left" Margin="36,67,0,0" VerticalAlignment="Top" Width="100" Click="aggiungi_button_Click" Height="25" FontWeight="Bold" Grid.ColumnSpan="2">
-            <Button.Background>
-                <RadialGradientBrush>
-                    <GradientStop Color="#FF35DE10" Offset="0"/>
-                    <GradientStop Color="Yellow" Offset="1"/>
-                </RadialGradientBrush>
-            </Button.Background>
-        </Button>
-        <Label Content="Scegli cosa fare" Margin="184,10,185,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="4"/>
-        <Label Content="copia clipboard:" Margin="36,0,48,101" VerticalAlignment="Bottom" FontSize="14" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
-        <Label Content="Lista shortcuts" Margin="36,0,48,138" VerticalAlignment="Bottom" FontSize="14" FontWeight="Bold" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
-        <Label Content="cambia focus: " Margin="36,0,48,67" VerticalAlignment="Bottom" FontSize="14" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
-        <Label HorizontalAlignment="Left" Height="23" Margin="20,215,0,0"  Content="          CTRL + C" VerticalAlignment="Top" Width="120"  FontWeight="Bold" Grid.Column="3" Background="White"/>
-        <Label HorizontalAlignment="Left" Height="23" Margin="20,245,0,0"  Content="          CTRL + V" VerticalAlignment="Top" Width="120" FontWeight="Bold" Grid.Column="3" Background="White"/>
-        <Label Content="ritorna al client:" Margin="36,0,48,33" VerticalAlignment="Bottom" FontSize="14" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
-        <Label HorizontalAlignment="Left" Height="23" Margin="20,277,0,0" Content="          CTRL + R" VerticalAlignment="Top" Width="120"  FontWeight="Bold" Grid.Column="3" Background="White"/>
+        <Button x:Name="aggiungi_button" Content="Aggiungi Server" HorizontalAlignment="Left" Margin="44,74,0,0" VerticalAlignment="Top" Width="102" Click="aggiungi_button_Click" Height="25" FontWeight="Bold" Background="#FF0068FF" Grid.Column="3"/>
+        <Label Content="Segli un server a cui connetterti" Margin="10,0,216,0" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="3" Grid.Column="1"/>
+        <Label Content="copia clipboard:" Margin="36,0,48,78" VerticalAlignment="Bottom" FontSize="14" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
+        <Label Content="Lista shortcuts" Margin="36,0,48,107" VerticalAlignment="Bottom" FontSize="14" FontWeight="Bold" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
+        <Label Content="cambia focus: " Margin="36,0,48,44" VerticalAlignment="Bottom" FontSize="14" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
+        <Label HorizontalAlignment="Left" Height="23" Margin="10,234,0,0"  Content="          CTRL + C" VerticalAlignment="Top" Width="120"  FontWeight="Bold" Grid.Column="3" Background="White"/>
+        <Label HorizontalAlignment="Left" Height="23" Margin="10,266,0,0"  Content="          CTRL + V" VerticalAlignment="Top" Width="120" FontWeight="Bold" Grid.Column="3" Background="White"/>
+        <Label Content="ritorna al client:" Margin="36,0,48,10" VerticalAlignment="Bottom" FontSize="14" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
+        <Label HorizontalAlignment="Left" Height="23" Margin="10,300,0,0" Content="          CTRL + R" VerticalAlignment="Top" Width="120"  FontWeight="Bold" Grid.Column="3" Background="White"/>
         <ProgressBar Minimum="0" Maximum="100" Name="pbStatus" Margin="215,10,21,304" Grid.Column="3" />
-        <ListBox Name="lServers" DisplayMemberPath="Address"  Grid.Column="3" HorizontalAlignment="Left" Height="100" Margin="41.333,92,0,0" VerticalAlignment="Top" Width="100"/>
-        <Button x:Name="ConnettiButton" Content="Connetti" Grid.Column="3" HorizontalAlignment="Left" Margin="182.333,101,0,0" VerticalAlignment="Top" Width="75" Click="ConnettiButton_Click"/>
-        <Button x:Name="CancellaButton" Content="Cancella" Grid.Column="3" HorizontalAlignment="Left" Margin="182.333,159,0,0" VerticalAlignment="Top" Width="75" Click="CancellaButton_Click"/>
+        <ListBox Name="lServers" DisplayMemberPath="Address"  Grid.Column="1" HorizontalAlignment="Left" Height="89" Margin="36,44,0,0" VerticalAlignment="Top" Width="188" Grid.ColumnSpan="3"/>
+        <Button x:Name="ConnettiButton" Content="Connetti" Grid.Column="1" HorizontalAlignment="Left" Margin="36,146,0,0" VerticalAlignment="Top" Width="75" Click="ConnettiButton_Click" FontWeight="Bold" Background="#FF51D414" Height="26"/>
+        <Button x:Name="CancellaButton" Content="Cancella" Grid.Column="1" HorizontalAlignment="Left" Margin="149,145,0,0" VerticalAlignment="Top" Width="75" Click="CancellaButton_Click" FontWeight="Bold" Background="#FFEC0E0E" Height="29" Grid.ColumnSpan="3"/>
     </Grid>
 </Window>

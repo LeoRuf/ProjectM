@@ -13,8 +13,8 @@
         <Label x:Name="ip_label" Content="IP" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Foreground="Black" FontWeight="Bold" Background="#00000000"/>
         <Label x:Name="porta_label" Content="Porta&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Width="44" Foreground="Black" FontWeight="Bold" Height="27"/>
         <Label x:Name="password_label" Content="Password&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Width="64" Foreground="Black" FontWeight="Bold" Height="23"/>
-        <TextBox x:Name="ip_text_box" HorizontalAlignment="Left" Height="23" Margin="99,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="123" Text="192.168.1.133"/>
-        <TextBox x:Name="porta_text_box" HorizontalAlignment="Left" Height="23" Margin="99,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="123" Text="1601"/>
+        <TextBox x:Name="ip_text_box" HorizontalAlignment="Left" Height="23" Margin="99,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="123" Text="192.168.1.132"/>
+        <TextBox x:Name="porta_text_box" HorizontalAlignment="Left" Height="23" Margin="99,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="123" Text="1602"/>
         <PasswordBox x:Name="password_text_box" HorizontalAlignment="Left" Margin="99,124,0,0" VerticalAlignment="Top" Width="123" Height="18"/>
         <Button x:Name="aggiungi_button" Content="Aggiungi" HorizontalAlignment="Left" Margin="110,177,0,0" VerticalAlignment="Top" Width="100" Click="aggiungi_button_Click" Height="23" Background="White" FontWeight="Bold"/>
 
