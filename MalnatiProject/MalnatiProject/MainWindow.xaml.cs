@@ -34,7 +34,7 @@ namespace MalnatiProject
 
 
 
-        public ArrayList list_servers = new ArrayList();
+        public ArrayList list_servers = new ArrayList(); //arrrayList comment
 
 
         private void aggiungi_button_Click(object sender, RoutedEventArgs e)
