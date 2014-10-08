@@ -53,17 +53,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ElencoServers.xaml.cs">
-      <DependentUpon>ElencoServers.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ServerWindow.xaml.cs">
       <DependentUpon>ServerWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="AddServer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ElencoServers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

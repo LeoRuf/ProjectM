@@ -17,6 +17,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
+
 
 namespace MalnatiProject
 {
@@ -26,16 +28,20 @@ namespace MalnatiProject
 
     public partial class MainWindow : Window
     {
+        public ObservableCollection<ServerWindow> serverList = new ObservableCollection<ServerWindow>();
+
         public MainWindow()
         {
             InitializeComponent();
+            //serverList.Add(new ServerWindow("192.168.1.21", 6000, "ciao"));
+            //serverList.Add(new ServerWindow("192.168.1.22", 6001, "ciao1"));
+            lServers.ItemsSource=serverList;
 
         }
 
 
 
-        public ArrayList list_servers = new ArrayList(); //arrrayList comment
-
+       // public ArrayList list_servers = new ArrayList(); //arrrayList comment
 
         private void aggiungi_button_Click(object sender, RoutedEventArgs e)
         {
@@ -49,16 +55,6 @@ namespace MalnatiProject
         }
 
 
-        private void elenco_server_button_Click(object sender, RoutedEventArgs e)
-        {
-            if (list_servers.Count == 0) { MessageBox.Show("Lista servers vuota"); }
-            else
-            {
-                ElencoServers elenco = new ElencoServers(); //ciao
-                elenco.Show();
-                elenco.PassArgument(list_servers);
-            }
-        }
 
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -84,6 +80,32 @@ namespace MalnatiProject
         {
             pbStatus.Value = e.ProgressPercentage;
         }
+
+        private void ConnettiButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (lServers.SelectedItem == null)
+            {
+                MessageBox.Show("Seleziona un server");
+            }
+            else
+            {
+                (lServers.SelectedItem as ServerWindow).Connetti();
+            }  
+        }
+
+        private void CancellaButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (lServers.SelectedItem == null)
+            {
+                MessageBox.Show("Seleziona un server");
+            }
+            else
+            {
+                serverList.Remove(lServers.SelectedItem as ServerWindow);
+            }
+        }
+
+    
 
 
 

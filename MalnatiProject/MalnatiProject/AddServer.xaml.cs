@@ -33,14 +33,14 @@ namespace MalnatiProject
         {
             ServerWindow server = new ServerWindow(this.ip_text_box.Text, Convert.ToInt16(this.porta_text_box.Text), this.password_text_box.Password);
             int flag = 0;
-            foreach (ServerWindow se in rif.list_servers)
+            foreach (ServerWindow se in rif.serverList)
             {
                 if (se.ip == this.ip_text_box.Text && se.porta == Convert.ToInt16(this.porta_text_box.Text)) { flag = 1; }
             }
 
             if (flag == 0)
             {
-                rif.list_servers.Add(server);
+                rif.serverList.Add(server);
                 MessageBox.Show("Server aggiunto alla lista");
             }
             else

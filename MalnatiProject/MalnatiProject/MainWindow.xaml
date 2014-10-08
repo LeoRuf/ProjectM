@@ -24,14 +24,6 @@
                 </RadialGradientBrush>
             </Button.Background>
         </Button>
-        <Button x:Name="elenco_server_button" Content="Elenco Servers" HorizontalAlignment="Left" Margin="36,120,0,0" VerticalAlignment="Top" Width="100" Click="elenco_server_button_Click" Height="25" FontWeight="Bold" Grid.ColumnSpan="2">
-            <Button.Background>
-                <RadialGradientBrush>
-                    <GradientStop Color="#FF1FA809" Offset="0"/>
-                    <GradientStop Color="Yellow" Offset="1"/>
-                </RadialGradientBrush>
-            </Button.Background>
-        </Button>
         <Label Content="Scegli cosa fare" Margin="184,10,185,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="4"/>
         <Label Content="copia clipboard:" Margin="36,0,48,101" VerticalAlignment="Bottom" FontSize="14" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
         <Label Content="Lista shortcuts" Margin="36,0,48,138" VerticalAlignment="Bottom" FontSize="14" FontWeight="Bold" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
@@ -41,5 +33,8 @@
         <Label Content="ritorna al client:" Margin="36,0,48,33" VerticalAlignment="Bottom" FontSize="14" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
         <Label HorizontalAlignment="Left" Height="23" Margin="20,277,0,0" Content="          CTRL + R" VerticalAlignment="Top" Width="120"  FontWeight="Bold" Grid.Column="3" Background="White"/>
         <ProgressBar Minimum="0" Maximum="100" Name="pbStatus" Margin="215,10,21,304" Grid.Column="3" />
+        <ListBox Name="lServers" DisplayMemberPath="Address"  Grid.Column="3" HorizontalAlignment="Left" Height="100" Margin="41.333,92,0,0" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="ConnettiButton" Content="Connetti" Grid.Column="3" HorizontalAlignment="Left" Margin="182.333,101,0,0" VerticalAlignment="Top" Width="75" Click="ConnettiButton_Click"/>
+        <Button x:Name="CancellaButton" Content="Cancella" Grid.Column="3" HorizontalAlignment="Left" Margin="182.333,159,0,0" VerticalAlignment="Top" Width="75" Click="CancellaButton_Click"/>
     </Grid>
 </Window>

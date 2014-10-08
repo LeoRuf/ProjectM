@@ -23,8 +23,6 @@ namespace MalnatiProject
     partial class ServerWindow : Window
     {
 
-
-
         public String ip;
         public Int16 porta;
         public String password;
@@ -32,7 +30,11 @@ namespace MalnatiProject
         public static ManualResetEvent allDone = new ManualResetEvent(false);
         bool connesso = false;
 
-
+        public String Address
+        {
+            get {return ip + " " + Convert.ToString(porta);} 
+            set{}
+        }
 
 
 
@@ -54,8 +56,6 @@ namespace MalnatiProject
 
         public void Connetti()
         {
-
-
             try
             {
                 // Connects to the server and receives the dummy byte array, then closes the socket.
