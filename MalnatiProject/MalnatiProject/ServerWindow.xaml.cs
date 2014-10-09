@@ -101,37 +101,39 @@ namespace MalnatiProject
 
         private void Grid_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            byte[] string_send = Encoding.UTF8.GetBytes(e.GetPosition(this).ToString() + "CLICK");
+            byte[] string_send = Encoding.UTF8.GetBytes("U");
             Console.WriteLine("You clicked me at " + e.GetPosition(this).ToString());
             //s.Send(string_send);
-
             socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
         }
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
-            //Point p = e.GetPosition(this);
-            //MessageBox.Show(p.ToString());
-            //string[] lines = Regex.Split(p.ToString(),";");
-            //string send_string = lines[0] + " " + lines[1];
-
-            //MessageBox.Show(lines[0] + " " + lines[1]);
-           // Int16 x=Convert.ToInt16(lines[0]);
-            //Int16 y=Convert.ToInt16(lines[1]);
-
-            //byte[] string_send = BitConverter.GetBytes(send_string);
-            
             byte[] string_send = Encoding.UTF8.GetBytes(e.GetPosition(this).ToString()+ "?");
-
-            
             Console.WriteLine("You moved me at " + e.GetPosition(this).ToString());
             //socket.Send(string_send);
-           socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
    
             
         }
 
         public static void BeginSendCallback(IAsyncResult ar) { }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            byte[] string_send = Encoding.UTF8.GetBytes("D");
+            Console.WriteLine("You clicked me at " + e.GetPosition(this).ToString());
+            //s.Send(string_send);
+            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+        }
+
+        private void Grid_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            byte[] string_send = Encoding.UTF8.GetBytes("R");
+            Console.WriteLine("You clicked me at " + e.GetPosition(this).ToString());
+            //s.Send(string_send);
+            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+        }
 
 
 
