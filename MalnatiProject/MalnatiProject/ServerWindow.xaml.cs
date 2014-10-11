@@ -18,6 +18,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace MalnatiProject
 {
@@ -28,8 +29,10 @@ namespace MalnatiProject
         public Int16 porta;
         public String password;
         public Socket socket;
+        byte[] rec= new byte[64];
         public static ManualResetEvent allDone = new ManualResetEvent(false);
         bool connesso = false;
+
 
         public String Address
         {
@@ -45,6 +48,7 @@ namespace MalnatiProject
             this.ip = ip;
             this.porta = porta;
             this.password = password;
+
 
         }
 
@@ -66,6 +70,14 @@ namespace MalnatiProject
 
                 socket.BeginConnect(lep, new AsyncCallback(ConnectCallback1), socket);
                 allDone.WaitOne();
+                socket.Send(Encoding.UTF8.GetBytes(password));
+                
+                socket.Receive(rec);
+                
+                if (Encoding.UTF8.GetString(rec).Trim('\0').Equals(password)) {}
+                else {
+                    MessageBox.Show("Password errata");
+                    return;}
                 connesso = true;
 
                 Console.WriteLine("STo per ricevere");
@@ -101,6 +113,7 @@ namespace MalnatiProject
 
         private void Grid_MouseUp(object sender, MouseButtonEventArgs e)
         {
+
             byte[] string_send = Encoding.UTF8.GetBytes("U");
             Console.WriteLine("You clicked me at " + e.GetPosition(this).ToString());
             //s.Send(string_send);
@@ -109,7 +122,10 @@ namespace MalnatiProject
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
-            byte[] string_send = Encoding.UTF8.GetBytes(e.GetPosition(this).ToString()+ "?");
+            double x = e.GetPosition(this).X /System.Windows.SystemParameters.PrimaryScreenWidth;
+            double y = e.GetPosition(this).Y / System.Windows.SystemParameters.PrimaryScreenHeight;
+
+            byte[] string_send = Encoding.UTF8.GetBytes(x+";"+y+ "?");
             Console.WriteLine("You moved me at " + e.GetPosition(this).ToString());
             //socket.Send(string_send);
             socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
