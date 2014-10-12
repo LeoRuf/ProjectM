@@ -30,6 +30,7 @@ namespace MalnatiProject
         public String password;
         public Socket socket;
         byte[] rec= new byte[64];
+        public MainWindow rif;
         public static ManualResetEvent allDone = new ManualResetEvent(false);
         bool connesso = false;
 
@@ -55,61 +56,88 @@ namespace MalnatiProject
 
         public String ToString()
         {
-            return this.ip + "    " + this.porta; //tostring
+            return this.ip + "    " + this.porta; 
 
         }
 
         public void Connetti()
         {
-            try
-            {
-                // Connects to the server and receives the dummy byte array, then closes the socket.
-                IPEndPoint lep = new IPEndPoint(IPAddress.Parse(ip), Convert.ToInt16(porta));
-                Console.WriteLine("STo per fare la connect");
-                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                try
+                {
+                    IPEndPoint lep = new IPEndPoint(IPAddress.Parse(ip), Convert.ToInt16(porta));
+                    Console.WriteLine("Sto per fare la connect");
+                    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-                socket.BeginConnect(lep, new AsyncCallback(ConnectCallback1), socket);
-                allDone.WaitOne();
-                socket.Send(Encoding.UTF8.GetBytes(password));
-                
-                socket.Receive(rec);
-                
-                if (Encoding.UTF8.GetString(rec).Trim('\0').Equals(password)) {}
-                else {
-                    MessageBox.Show("Password errata");
-                    return;}
-                connesso = true;
+                   
 
-                Console.WriteLine("STo per ricevere");
+                    socket.Connect(lep);
+                    
+                    Console.WriteLine("Socket connected to {0}",
+                        socket.RemoteEndPoint.ToString());
 
-                IPEndPoint remoteEndPoint = (IPEndPoint)socket.RemoteEndPoint;
-                Console.WriteLine("Connected to {0}:{1}", remoteEndPoint.Address, remoteEndPoint.Port);
-                this.Show();
+                    socket.Send(Encoding.UTF8.GetBytes(password));
 
-                //byte[] buffer = new byte[4];
-                //Console.WriteLine((s.Receive(buffer) == buffer.Length) ? "Received message" : "Incorrect message");
-                //Console.WriteLine(Encoding.UTF8.GetString(buffer));
-                //s.Send(Encoding.UTF8.GetBytes("Che bello funziona"));
+                    socket.Receive(rec);
 
+                    if (Encoding.UTF8.GetString(rec).Trim('\0').Equals(password)) { }
+                    else
+                    {
+                        MessageBox.Show("Password errata");
+                        return;
+                    }
 
-            }
-            catch (Exception ex)
-            {
-                // An exception occured: should be a SocketException due to a timeout if we chose to bind to an address.
-                Console.WriteLine("ERROR: " + ex.ToString());
-            }
+                    connesso = true;
+
+                    
+
+                    IPEndPoint remoteEndPoint = (IPEndPoint)socket.RemoteEndPoint;
+                    Console.WriteLine("Connected to {0}:{1}", remoteEndPoint.Address, remoteEndPoint.Port);
 
 
+                }
+                catch (ArgumentNullException ane)
+                {
+                    //Unica eccezione, non tre diverse
+                    Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
+                    MessageBox.Show("Impossibile connettersi...");
+                    rif.Enable_ConnettiButton();
+                    return;
 
+                }
+                catch (SocketException se)
+                {
+                    Console.WriteLine("SocketException : {0}", se.ToString());
+                    MessageBox.Show("Impossibile connettersi...");
+                    rif.Enable_ConnettiButton();
+                    return;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                    MessageBox.Show("Impossibile connettersi...");
+                    rif.Enable_ConnettiButton();
+                    return;
+
+                }
+
+                rif.Change_Focus(this);
 
         }
 
-        public static void ConnectCallback1(IAsyncResult ar)
-        {
-            allDone.Set();
-            Socket s = (Socket)ar.AsyncState;
-            s.EndConnect(ar);
-        }
+        //public static void ConnectCallback1(IAsyncResult ar)
+        //{
+        //    Console.WriteLine("4.5");
+
+        //    Console.WriteLine("5");
+        //    Socket s = (Socket)ar.AsyncState;
+        //    Console.WriteLine("6");
+
+        //    s.EndConnect(ar);
+        //    Console.WriteLine("7");
+        //    allDone.Set();
+
+
+        //}
 
         private void Grid_MouseUp(object sender, MouseButtonEventArgs e)
         {

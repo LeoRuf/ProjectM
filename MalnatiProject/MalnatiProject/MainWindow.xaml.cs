@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -29,11 +30,13 @@ namespace MalnatiProject
     public partial class MainWindow : Window
     {
         public ObservableCollection<ServerWindow> serverList = new ObservableCollection<ServerWindow>();
+        private Dispatcher dispatcher;
 
         public MainWindow()
         {
             InitializeComponent();
-            //serverList.Add(new ServerWindow("192.168.1.21", 6000, "ciao"));
+            dispatcher = Dispatcher.CurrentDispatcher;
+            serverList.Add(new ServerWindow("192.168.1.140", 1601, "volley"));
             //serverList.Add(new ServerWindow("192.168.1.22", 6001, "ciao1"));
             lServers.ItemsSource=serverList;
 
@@ -56,27 +59,28 @@ namespace MalnatiProject
 
 
         private void Window_ContentRendered(object sender, EventArgs e)
-        {
+        {/*
             BackgroundWorker worker = new BackgroundWorker();
             worker.WorkerReportsProgress = true;
             worker.DoWork += worker_DoWork;
             worker.ProgressChanged += worker_ProgressChanged;
 
-            worker.RunWorkerAsync();
+            worker.RunWorkerAsync();*/
         }
 
         void worker_DoWork(object sender, DoWorkEventArgs e)
-        {
+        {/*
             for (int i = 0; i < 100; i++)
             {
                 (sender as BackgroundWorker).ReportProgress(i);
                 Thread.Sleep(100);
-            }
+            }*/
         }
 
         void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
+        {/*
             pbStatus.Value = e.ProgressPercentage;
+           */
         }
 
         private void ConnettiButton_Click(object sender, RoutedEventArgs e)
@@ -87,8 +91,37 @@ namespace MalnatiProject
             }
             else
             {
-                (lServers.SelectedItem as ServerWindow).Connetti();
+                ConnettiButton.IsEnabled = false;
+                loading_label.Content = "Connessione in corso...";
+                (lServers.SelectedItem as ServerWindow).rif = this;
+                Thread workerThread = new Thread((lServers.SelectedItem as ServerWindow).Connetti);
+                workerThread.Start();
+
+                
             }  
+        }
+
+        public void Change_Focus(ServerWindow window)
+        {
+            Action action = () =>
+            {
+                ConnettiButton.IsEnabled = true;
+                loading_label.Content = "";
+                window.Show();
+            };
+
+            dispatcher.BeginInvoke(action);
+        }
+
+        public void Enable_ConnettiButton()
+        {
+            Action action = () =>
+            {
+                ConnettiButton.IsEnabled = true;
+                loading_label.Content = "";
+            };
+
+            dispatcher.BeginInvoke(action);
         }
 
         private void CancellaButton_Click(object sender, RoutedEventArgs e)
