@@ -36,7 +36,7 @@ namespace MalnatiProject
 
         public String Address
         {
-            get {return ip + " " + Convert.ToString(porta);} 
+            get {return     "      " + ip + "             " + Convert.ToString(porta);} 
             set{}
         }
 

@@ -41,7 +41,8 @@ namespace MalnatiProject
             if (flag == 0)
             {
                 rif.serverList.Add(server);
-                MessageBox.Show("Server aggiunto alla lista");
+                //MessageBox.Show("Server aggiunto alla lista");
+                this.Close();
             }
             else
             {
