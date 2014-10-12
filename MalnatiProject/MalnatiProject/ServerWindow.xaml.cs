@@ -18,7 +18,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
-using System.Windows;
 
 namespace MalnatiProject
 {
@@ -41,7 +40,13 @@ namespace MalnatiProject
             set{}
         }
 
+        public bool isConnesso()
+        {
+            if (connesso == true)
+                return true;
 
+            return false;
+        }
 
         public ServerWindow(String ip, Int16 porta, String password)
         {
@@ -85,9 +90,6 @@ namespace MalnatiProject
                         MessageBox.Show("Password errata");
                         return;
                     }
-
-                    connesso = true;
-
                     
 
                     IPEndPoint remoteEndPoint = (IPEndPoint)socket.RemoteEndPoint;
@@ -120,8 +122,16 @@ namespace MalnatiProject
 
                 }
 
+                connesso = true;
                 rif.Change_Focus(this);
 
+        }
+
+        public void Disconnetti()
+        {
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
+            connesso = false;
         }
 
         //public static void ConnectCallback1(IAsyncResult ar)
@@ -177,6 +187,32 @@ namespace MalnatiProject
             Console.WriteLine("You clicked me at " + e.GetPosition(this).ToString());
             //s.Send(string_send);
             socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+        }
+
+        private void Grid_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+            {
+
+                switch (e.Key)
+                {
+                    case Key.D:
+                        Console.WriteLine("D");
+                        this.Hide();
+                        rif.Show(); //Serve?
+
+                        break;
+                    case Key.F:
+                        //handle F key
+                        break;
+                }
+            }
+
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            grid.Focus();
         }
 
 

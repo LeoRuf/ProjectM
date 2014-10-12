@@ -101,6 +101,14 @@ namespace MalnatiProject
             }  
         }
 
+        private void DisconnettiButton_Click(object sender, RoutedEventArgs e)
+        {
+            ((ServerWindow)lServers.SelectedItem).Disconnetti();
+            ConnettiButton.Visibility = Visibility.Visible;
+            DisconnettiButton.Visibility = Visibility.Collapsed;
+        }
+
+
         public void Change_Focus(ServerWindow window)
         {
             Action action = () =>
@@ -112,6 +120,18 @@ namespace MalnatiProject
 
             dispatcher.BeginInvoke(action);
         }
+
+        /*
+        public void Return_Main()
+        {
+            Action action = () =>
+            {
+                this.Show();
+            };
+
+            dispatcher.BeginInvoke(action);
+        }
+        */
 
         public void Enable_ConnettiButton()
         {
@@ -133,6 +153,21 @@ namespace MalnatiProject
             else
             {
                 serverList.Remove(lServers.SelectedItem as ServerWindow);
+            }
+        }
+
+        private void lServers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((ServerWindow)lServers.SelectedItem).isConnesso() == true)
+            {
+                ConnettiButton.Visibility = Visibility.Collapsed;
+                DisconnettiButton.Visibility = Visibility.Visible;
+
+            }
+            else
+            {
+                ConnettiButton.Visibility = Visibility.Visible;
+                DisconnettiButton.Visibility = Visibility.Collapsed;
             }
         }
 

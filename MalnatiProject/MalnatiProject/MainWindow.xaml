@@ -16,19 +16,20 @@
                 <GradientStop Color="#FF094E6E" Offset="0.91"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <Button x:Name="aggiungi_button" Content="Aggiungi" HorizontalAlignment="Left" Margin="75,155,0,0" VerticalAlignment="Top" Width="77" Click="aggiungi_button_Click" Height="31" FontWeight="Bold" Background="#FFEE740E" Grid.Column="1"/>
+        <Button x:Name="aggiungi_button" Content="Aggiungi" HorizontalAlignment="Left" Margin="66,167,0,0" VerticalAlignment="Top" Width="77" Click="aggiungi_button_Click" Height="31" FontWeight="Bold" Background="#FFEE740E" Grid.Column="1"/>
         <Label Content="Segli un server a cui connetterti" Margin="10,0,216,0" VerticalAlignment="Top" FontSize="14" FontWeight="Bold" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="3" Grid.Column="1" FontStyle="Italic"/>
         <Label Content="copia clipboard:" Margin="22,0,62,78" VerticalAlignment="Bottom" FontWeight="Light" FontSize="14" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
         <Label Content="Lista shortcuts" Margin="22,0,62,107" VerticalAlignment="Bottom" FontSize="14" FontWeight="Bold" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2" FontStyle="Italic"/>
         <Label Content="cambia focus: " Margin="22,0,62,44" VerticalAlignment="Bottom" FontSize="14" FontWeight="Light" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
-        <Label HorizontalAlignment="Left" Height="23" Margin="10,232,0,0"  Content="          CTRL + C" VerticalAlignment="Top" Width="120"  FontWeight="Bold" Grid.Column="3" Background="White" FontStyle="Italic"/>
-        <Label HorizontalAlignment="Left" Height="23" Margin="10,268,0,0"  Content="          CTRL + V" VerticalAlignment="Top" Width="120" FontWeight="Bold" Grid.Column="3" Background="White" FontStyle="Italic"/>
+        <Label HorizontalAlignment="Left" Height="23" Margin="10,232,0,0"  Content="          CTRL + " VerticalAlignment="Top" Width="120"  FontWeight="Bold" Grid.Column="3" Background="White" FontStyle="Italic"/>
+        <Label HorizontalAlignment="Left" Height="23" Margin="10,268,0,0"  Content="          CTRL + " VerticalAlignment="Top" Width="120" FontWeight="Bold" Grid.Column="3" Background="White" FontStyle="Italic"/>
         <Label Content="ritorna al client:" Margin="22,0,62,10" FontWeight="Light" VerticalAlignment="Bottom" FontSize="14" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="2"/>
-        <Label HorizontalAlignment="Left" Height="23" Margin="10,300,0,0" Content="          CTRL + R" VerticalAlignment="Top" Width="120"  FontWeight="Bold" Grid.Column="3" Background="White" FontStyle="Italic"/>
+        <Label HorizontalAlignment="Left" Height="23" Margin="10,300,0,0" Content="          CTRL + D" VerticalAlignment="Top" Width="120"  FontWeight="Bold" Grid.Column="3" Background="White" FontStyle="Italic"/>
         <ProgressBar Minimum="0" Maximum="100" Name="pbStatus" Margin="215,10,21,304" Grid.Column="3" />
-        <ListBox Name="lServers" DisplayMemberPath="Address" FontWeight="Light"  Grid.Column="1" HorizontalAlignment="Left" Height="93" Margin="16,44,0,0" VerticalAlignment="Top" Width="195" Grid.ColumnSpan="2"/>
-        <Button x:Name="ConnettiButton" Content="Connetti" Grid.Column="3" HorizontalAlignment="Left" Margin="16,54,0,0" VerticalAlignment="Top" Width="75" Click="ConnettiButton_Click" FontWeight="Bold" Background="#FF51D414" Height="26"/>
-        <Button x:Name="CancellaButton" Content="Cancella" Grid.Column="3" HorizontalAlignment="Left" Margin="16,98,0,0" VerticalAlignment="Top" Width="75" Click="CancellaButton_Click" FontWeight="Bold" Background="#FFEC1414" Height="29"/>
+        <ListBox Name="lServers" DisplayMemberPath="Address" FontWeight="Light"  Grid.Column="1" HorizontalAlignment="Left" Height="107" Margin="16,44,0,0" VerticalAlignment="Top" Width="195" Grid.ColumnSpan="3" SelectionChanged="lServers_SelectionChanged"/>
+        <Button x:Name="ConnettiButton" Content="Connetti" Grid.Column="3" HorizontalAlignment="Left" Margin="16,52,0,0" VerticalAlignment="Top" Width="75" Click="ConnettiButton_Click" FontWeight="Bold" Background="#FF51D414" Height="26"/>
+        <Button x:Name="CancellaButton" Content="Cancella" Grid.Column="3" HorizontalAlignment="Left" Margin="16,103,0,0" VerticalAlignment="Top" Width="75" Click="CancellaButton_Click" FontWeight="Bold" Background="#FFEC1414" Height="29"/>
         <Label x:Name="loading_label" Content="" Grid.Column="3" HorizontalAlignment="Left" Margin="16,155,0,0" VerticalAlignment="Top" Width="182" FontSize="14" FontWeight="Bold" FontStyle="Italic"/>
+        <Button x:Name="DisconnettiButton" Content="Disconnetti" Grid.Column="3" HorizontalAlignment="Left" Margin="16,52,0,0" VerticalAlignment="Top" Width="75" Click="DisconnettiButton_Click" FontWeight="Bold" Background="#FFE0D600" Height="26" Visibility="Collapsed"/>
     </Grid>
 </Window>
