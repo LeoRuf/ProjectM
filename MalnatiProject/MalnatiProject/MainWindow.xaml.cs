@@ -32,7 +32,7 @@ namespace MalnatiProject
         public ObservableCollection<ServerWindow> serverList = new ObservableCollection<ServerWindow>();
         private Dispatcher dispatcher;
 
-        public MainWindow()
+        public MainWindow() //maon window
         {
             InitializeComponent();
             dispatcher = Dispatcher.CurrentDispatcher;
