@@ -36,8 +36,7 @@ namespace MalnatiProject
         {
             InitializeComponent();
             dispatcher = Dispatcher.CurrentDispatcher;
-            serverList.Add(new ServerWindow("192.168.1.140", 1601, "volley"));
-            //serverList.Add(new ServerWindow("192.168.1.22", 6001, "ciao1"));
+            serverList.Add(new ServerWindow("192.168.1.133", 1601, "ciao"));
             lServers.ItemsSource=serverList;
 
         }
@@ -104,9 +103,9 @@ namespace MalnatiProject
         private void DisconnettiButton_Click(object sender, RoutedEventArgs e)
         {
             ((ServerWindow)lServers.SelectedItem).Disconnetti();
-            ConnettiButton.Visibility = Visibility.Visible;
-            DisconnettiButton.Visibility = Visibility.Collapsed;
+            
         }
+
 
 
         public void Change_Focus(ServerWindow window)

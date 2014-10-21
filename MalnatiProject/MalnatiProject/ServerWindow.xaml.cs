@@ -132,6 +132,10 @@ namespace MalnatiProject
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
             connesso = false;
+            rif.ConnettiButton.Visibility = Visibility.Visible;
+            rif.DisconnettiButton.Visibility = Visibility.Collapsed;
+        
+           
         }
 
         //public static void ConnectCallback1(IAsyncResult ar)
@@ -155,30 +159,58 @@ namespace MalnatiProject
             byte[] string_send = Encoding.UTF8.GetBytes("U");
             Console.WriteLine("You clicked me at " + e.GetPosition(this).ToString());
             //s.Send(string_send);
-            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            try
+            {
+                socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            }
+            catch (SocketException)
+            {
+                MessageBox.Show("Connessione caduta");
+                this.Hide();
+                this.Disconnetti();
+            }
+            
         }
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
+
             double x = e.GetPosition(this).X /System.Windows.SystemParameters.PrimaryScreenWidth;
             double y = e.GetPosition(this).Y / System.Windows.SystemParameters.PrimaryScreenHeight;
 
             byte[] string_send = Encoding.UTF8.GetBytes(x+";"+y+ "?");
             Console.WriteLine("You moved me at " + e.GetPosition(this).ToString());
             //socket.Send(string_send);
-            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-   
+            try
+            {
+                //socket.Send(string_send);
+                socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            }
+            catch (SocketException) {
+                MessageBox.Show("Connessione caduta");
+                this.Hide();
+                this.Disconnetti(); 
+            }
             
         }
 
         public static void BeginSendCallback(IAsyncResult ar) { }
-
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             byte[] string_send = Encoding.UTF8.GetBytes("D");
             Console.WriteLine("You clicked me at " + e.GetPosition(this).ToString());
             //s.Send(string_send);
-            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            try
+            {
+                socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            }
+            catch (SocketException)
+            {
+                MessageBox.Show("Connessione caduta");
+                this.Hide();
+                this.Disconnetti();
+            }
+            
         }
 
         private void Grid_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
@@ -186,7 +218,17 @@ namespace MalnatiProject
             byte[] string_send = Encoding.UTF8.GetBytes("R");
             Console.WriteLine("You clicked me at " + e.GetPosition(this).ToString());
             //s.Send(string_send);
-            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            try
+            {
+                socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            }
+            catch (SocketException)
+            {
+                MessageBox.Show("Connessione caduta");
+                this.Hide();
+                this.Disconnetti();
+            }
+            
         }
 
         private void Grid_KeyDown(object sender, KeyEventArgs e)
