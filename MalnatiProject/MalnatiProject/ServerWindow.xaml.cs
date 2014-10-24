@@ -36,7 +36,7 @@ namespace MalnatiProject
 
         public String Address
         {
-            get {return     "      " + ip + "             " + Convert.ToString(porta);} 
+            get {return     "       " + ip + "                         " + Convert.ToString(porta);} 
             set{}
         }
 
@@ -102,7 +102,7 @@ namespace MalnatiProject
                     //Unica eccezione, non tre diverse
                     Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
                     MessageBox.Show("Impossibile connettersi...");
-                    rif.Enable_ConnettiButton();
+                    rif.Enable_ControllaButton();
                     return;
 
                 }
@@ -110,14 +110,14 @@ namespace MalnatiProject
                 {
                     Console.WriteLine("SocketException : {0}", se.ToString());
                     MessageBox.Show("Impossibile connettersi...");
-                    rif.Enable_ConnettiButton();
+                    rif.Enable_ControllaButton();
                     return;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("Unexpected exception : {0}", e.ToString());
                     MessageBox.Show("Impossibile connettersi...");
-                    rif.Enable_ConnettiButton();
+                    rif.Enable_ControllaButton();
                     return;
 
                 }
@@ -127,14 +127,25 @@ namespace MalnatiProject
 
         }
 
+        public void Controlla()
+        {
+
+            if (isConnesso() == true && socket!=null) { 
+                rif.Change_Focus(this); 
+            }
+            else{
+                Connetti();
+
+            }
+        }
+
         public void Disconnetti()
         {
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
             connesso = false;
-            rif.ConnettiButton.Visibility = Visibility.Visible;
-            rif.DisconnettiButton.Visibility = Visibility.Collapsed;
-        
+            rif.controlla_button.Content = "Controlla";
+            rif.loading_label.Content = "";
            
         }
 
