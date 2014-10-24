@@ -31,19 +31,19 @@ namespace MalnatiProject
     {
         public ObservableCollection<ServerWindow> serverList = new ObservableCollection<ServerWindow>();
         private Dispatcher dispatcher;
+        bool cancella_premuto = false;
+        
+        
 
-        public MainWindow() //maon window
+        public MainWindow() 
         {
             InitializeComponent();
             dispatcher = Dispatcher.CurrentDispatcher;
-            serverList.Add(new ServerWindow("192.168.1.136", 1601, "ciao"));
+            serverList.Add(new ServerWindow("192.168.1.135", 1601, "ciao"));
             lServers.ItemsSource=serverList;
+           
 
         }
-
-
-
-       // public ArrayList list_servers = new ArrayList(); //arrrayList comment
 
         private void aggiungi_button_Click(object sender, RoutedEventArgs e)
         {
@@ -60,17 +60,41 @@ namespace MalnatiProject
             Action action = () =>
             {
                 controlla_button.IsEnabled = true;
+                DisconnettiButton.IsEnabled = true;
+                CancellaButton.IsEnabled = true;
                 loading_label.Content = "";
 
                 if (window.isConnesso() == true)
                 {
-                    controlla_button.Content = "Disconnetti";
-                    controlla_button.Background= Brushes.Yellow;
+                    this.DisconnettiButton.Visibility = Visibility.Visible;
                 }
+
+                int n = serverList.IndexOf(window);
+                Console.WriteLine(n);
+                Button b= new Button();
+                b.Background= Brushes.Yellow;
+                b.Width =20;
+                b.Height =20;
+                b.BorderBrush = Brushes.White;
+                b.VerticalAlignment = VerticalAlignment.Top;
+
+
+                double x = 0;
+                double y = 0;
+                for (int i =0; i < n; i++)
+                {
+                    Button b1 = new Button();
+                    b1.Background = Brushes.White;
+                    b1.Width = 20;
+                    b1.Height = 20;
+                    b1.BorderBrush = Brushes.White;
+                    b1.VerticalAlignment = VerticalAlignment.Top;
+                    b1.Margin = new Thickness(x, y +(20*i), 0, 0); 
                 
-                
-                
-                
+                    master.Children.Add(b1);
+                }
+                master.Children.Add(b);
+                b.Margin = new Thickness(x, y + (20 * n), 0, 0); 
                 window.Show();
 
             };
@@ -78,21 +102,99 @@ namespace MalnatiProject
             dispatcher.BeginInvoke(action);
         }
 
-    
+        
 
-        public void Enable_ControllaButton()
+        public void Enable_Buttons()
         {
             Action action = () =>
             {
                 controlla_button.IsEnabled = true;
+                CancellaButton.IsEnabled = true;
+                DisconnettiButton.IsEnabled = true;
+
                 loading_label.Content = "";
-                controlla_button.Content = "Disconetti";
             };
 
             dispatcher.BeginInvoke(action);
         }
 
         private void CancellaButton_Click(object sender, RoutedEventArgs e)
+        {
+            cancella_premuto = true;
+            if (lServers.SelectedItem == null)
+            {
+                MessageBox.Show("Seleziona un server");
+            }
+            else
+            {
+                if (((ServerWindow)lServers.SelectedItem).isConnesso() == true)
+                {
+                    if (((ServerWindow)lServers.SelectedItem).boss == true)
+                    {
+                        int n = serverList.IndexOf((ServerWindow)lServers.SelectedItem);
+                        Console.WriteLine(n);
+                        Console.WriteLine("Entrato");
+
+                        //Button b = new Button();
+                        //b.Background = Brushes.Black;
+                        //b.Width = 20;
+                        //b.Height = 20;
+                        //b.BorderBrush = Brushes.White;
+                        
+                            master.Children.RemoveAt(n);
+                        
+                        //b.Margin = new Thickness(0, 0 + (20 * n), 0, 0);
+                        //master.Children.Add(b);
+
+                    }
+                    loading_label.Content = "Cancellazione server in corso...";
+                    ((ServerWindow)lServers.SelectedItem).Disconnetti();
+                }
+                serverList.Remove(lServers.SelectedItem as ServerWindow);
+            
+                cancella_premuto = false;
+            }
+        }
+
+      
+
+        private void Controlla_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (lServers.SelectedItem == null)
+                {
+                    MessageBox.Show("Seleziona un server");
+                }
+           else{
+                        controlla_button.IsEnabled = false;
+                        CancellaButton.IsEnabled = false;
+                        DisconnettiButton.IsEnabled = false;
+                        loading_label.Content = "Controllo in corso...";
+                        (lServers.SelectedItem as ServerWindow).rif = this;
+                        Thread workerThread1 = new Thread((lServers.SelectedItem as ServerWindow).Controlla);
+                        workerThread1.Start();
+                    
+                    
+                }
+           
+        }
+
+        private void lServers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cancella_premuto == false)
+            {
+                if (((ServerWindow)lServers.SelectedItem).isConnesso() == false)
+                {
+                    DisconnettiButton.Visibility = Visibility.Collapsed; 
+                }
+                else
+                {
+                    DisconnettiButton.Visibility = Visibility.Visible;
+
+                }
+            }
+        }
+
+        private void Disconnetti_Click(object sender, RoutedEventArgs e)
         {
             if (lServers.SelectedItem == null)
             {
@@ -101,70 +203,22 @@ namespace MalnatiProject
             else
             {
                 if (((ServerWindow)lServers.SelectedItem).isConnesso() == true)
-                    loading_label.Content = "Cancellazione server in corso...";
-                ((ServerWindow)lServers.SelectedItem).Disconnetti();
-           
-                serverList.Remove(lServers.SelectedItem as ServerWindow);
-            }
-        }
-
-      
-
-        private void Controlla_Button_Click(object sender, RoutedEventArgs e)
-        {
-
-           
-
-                if (lServers.SelectedItem == null)
                 {
-                    MessageBox.Show("Seleziona un server");
-                }
-                else
-                {
-                    if (((ServerWindow)lServers.SelectedItem).isConnesso() == false)
+
+                    if (((ServerWindow)lServers.SelectedItem).boss == true)
                     {
-                        controlla_button.IsEnabled = false;
-                        loading_label.Content = "Controllo in corso...";
-                        (lServers.SelectedItem as ServerWindow).rif = this;
-                        Thread workerThread1 = new Thread((lServers.SelectedItem as ServerWindow).Controlla);
-                        workerThread1.Start();
-                    }
-                    else
-                    {
+                        int n = serverList.IndexOf((ServerWindow)lServers.SelectedItem);
+                        Console.WriteLine(n);
+                        Console.WriteLine("Entrato");
+                        master.Children.RemoveAt(n);
 
-                        loading_label.Content = "Disconnessione in corso...";
-                        ((ServerWindow)lServers.SelectedItem).Disconnetti();
-
-                       
                     }
+                    loading_label.Content = "Disconnessione in corso...";
+                    ((ServerWindow)lServers.SelectedItem).Disconnetti();
                 }
-           
-        }
-
-        private void lServers_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (((ServerWindow)lServers.SelectedItem).isConnesso() == false)
-            {
-                controlla_button.Content = "Controlla";
-                controlla_button.Background = Brushes.LimeGreen;
-            }
-            else{
-                controlla_button.Content = "Disconnetti";
-                controlla_button.Background = Brushes.Yellow;
-                ((ServerWindow)lServers.SelectedItem).Controlla();
-            
+                
             }
         }
 
-
-
-
-
-     
-
-    
-
-
-
-    }
+  }
 }

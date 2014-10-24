@@ -3,13 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="serverWindow"  Height="600" Width="800" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid x:Name="grid" Background="LightBlue" MouseUp="Grid_MouseUp" MouseMove="Grid_MouseMove" MouseDown="Grid_MouseDown" MouseRightButtonUp="Grid_MouseRightButtonUp" KeyDown="Grid_KeyDown" Loaded="Grid_Loaded" Focusable="True" >
-        <Label Content="Lista shortcuts" Margin="30,0,54,155" VerticalAlignment="Bottom" FontSize="14" FontWeight="Bold" RenderTransformOrigin="1.133,0.793" FontStyle="Italic"/>
-        <Label Content="cambia focus: " Margin="30,0,54,121" VerticalAlignment="Bottom" FontSize="14" FontWeight="Light" RenderTransformOrigin="1.133,0.793"/>
-        <Label HorizontalAlignment="Left" Height="23" Margin="259,536,0,0"  Content="          CTRL + " VerticalAlignment="Top" Width="120"  FontWeight="Bold" Background="White" FontStyle="Italic"/>
-        <Label HorizontalAlignment="Left" Height="23" Margin="259,456,0,0"  Content="          CTRL + " VerticalAlignment="Top" Width="120" FontWeight="Bold" Background="White" FontStyle="Italic"/>
-        <Label Content="ritorna al client:" Margin="30,0,54,84" FontWeight="Light" VerticalAlignment="Bottom" FontSize="14" RenderTransformOrigin="1.133,0.793"/>
-        <Label HorizontalAlignment="Left" Height="23" Margin="259,498,0,0" Content="          CTRL + D" VerticalAlignment="Top" Width="120"  FontWeight="Bold" Background="White" FontStyle="Italic"/>
-        <Label Content="copia clipboard:" Margin="30,0,54,41" FontWeight="Light" VerticalAlignment="Bottom" FontSize="14" RenderTransformOrigin="1.133,0.793"/>
-
+        <Label Content="Lista shortcuts" Margin="30,379,654,189"  FontSize="14" FontWeight="Bold" FontStyle="Italic"/>
+        <Label Content="cambia focus: " Margin="30,465,639,98"  FontSize="14" FontWeight="Light"/>
+        <Label  Height="23" Margin="231,507,449,70"  Content="          CTRL + "  Width="120"  FontWeight="Bold" Background="White" FontStyle="Italic" />
+        <Label  Height="23" Margin="231,465,449,112"  Content="          CTRL + S "  Width="120" FontWeight="Bold" Background="White" FontStyle="Italic"/>
+        <Label Content="ritorna al client:"  FontWeight="Light"  FontSize="14" Margin="30,422,658,144"/>
+        <Label  Height="23" Margin="231,422,449,155" Content="          CTRL + D"  Width="120"  FontWeight="Bold" Background="White" FontStyle="Italic"/>
+        <Label Content="copia clipboard:" Margin="30,507,639,56" FontWeight="Light"  FontSize="14"/>
     </Grid>
 </Window>

@@ -32,11 +32,13 @@ namespace MalnatiProject
         public MainWindow rif;
         public static ManualResetEvent allDone = new ManualResetEvent(false);
         bool connesso = false;
+        public bool boss = false;
 
 
         public String Address
         {
-            get {return     "       " + ip + "                         " + Convert.ToString(porta);} 
+           
+            get { return     "       " + ip + "                         " + Convert.ToString(porta);} 
             set{}
         }
 
@@ -44,7 +46,7 @@ namespace MalnatiProject
         {
             if (connesso == true)
                 return true;
-
+            
             return false;
         }
 
@@ -102,7 +104,7 @@ namespace MalnatiProject
                     //Unica eccezione, non tre diverse
                     Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
                     MessageBox.Show("Impossibile connettersi...");
-                    rif.Enable_ControllaButton();
+                    rif.Enable_Buttons();
                     return;
 
                 }
@@ -110,19 +112,20 @@ namespace MalnatiProject
                 {
                     Console.WriteLine("SocketException : {0}", se.ToString());
                     MessageBox.Show("Impossibile connettersi...");
-                    rif.Enable_ControllaButton();
+                    rif.Enable_Buttons();
                     return;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("Unexpected exception : {0}", e.ToString());
                     MessageBox.Show("Impossibile connettersi...");
-                    rif.Enable_ControllaButton();
+                    rif.Enable_Buttons();
                     return;
 
                 }
 
                 connesso = true;
+                boss = true;
                 rif.Change_Focus(this);
 
         }
@@ -141,10 +144,10 @@ namespace MalnatiProject
 
         public void Disconnetti()
         {
+            connesso = false;
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
-            connesso = false;
-            rif.controlla_button.Content = "Controlla";
+            rif.DisconnettiButton.Visibility = Visibility.Collapsed;
             rif.loading_label.Content = "";
            
         }
@@ -253,12 +256,27 @@ namespace MalnatiProject
                         Console.WriteLine("D");
                         this.Hide();
                         rif.Show(); //Serve?
+                        break;
+                    case Key.S:
+                        Console.WriteLine("S");
+                        foreach (ServerWindow ser in rif.serverList)
+                        {
+                            if(rif.serverList.IndexOf(this)<rif.serverList.IndexOf(ser) && ser.socket!=null && ser.isConnesso()==true){
 
+                                rif.Change_Focus(ser);
+                                break;
+                            }
+                        }
+
+                        rif.Show();
+                        this.Hide();
                         break;
-                    case Key.F:
-                        //handle F key
+                  
+                    default:
+                        Console.WriteLine("Default case");
                         break;
-                }
+                 
+                } 
             }
 
         }

@@ -1,9 +1,9 @@
 ﻿<Window x:Class="MalnatiProject.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Client" Height="370" Width="525" 
+        Title="Client" Height="335" Width="450" 
          >
-    <Grid x:Name="ConnettiServerButton" RenderTransformOrigin="0.758,0.419">
+    <Grid x:Name="ConnettiServerButton">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition Width="205*"/>
@@ -16,16 +16,18 @@
                 <GradientStop Color="#FF094E6E" Offset="0.91"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <Button x:Name="aggiungi_button" Content="Aggiungi" HorizontalAlignment="Left" Margin="153,279,0,0" VerticalAlignment="Top" Width="95" Click="aggiungi_button_Click" Height="29" FontWeight="Bold" Background="#FF0E92EE" Grid.Column="1" Grid.ColumnSpan="3"/>
-        <Label Content="Segli un server a cui connetterti" Margin="116,0,110,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="3" Grid.Column="1" FontStyle="Italic"/>
-        <ListBox Name="lServers" DisplayMemberPath="Address" FontWeight="Light"  Grid.Column="1" HorizontalAlignment="Left" Height="137" Margin="66,126,0,0" VerticalAlignment="Top" Width="254" Grid.ColumnSpan="3" SelectionChanged="lServers_SelectionChanged"/>
-        <Button x:Name="CancellaButton" Content="Cancella" Grid.Column="3" HorizontalAlignment="Left" Margin="124,209,0,0" VerticalAlignment="Top" Width="95" Click="CancellaButton_Click" FontWeight="Bold" Background="#FFEC1414" Height="29" RenderTransformOrigin="0.5,0.5" BorderBrush="#FF707070"/>
+        <Button x:Name="aggiungi_button" Content="Aggiungi" HorizontalAlignment="Left" Margin="111,260,0,0" VerticalAlignment="Top" Width="95" Click="aggiungi_button_Click" Height="29" FontWeight="Bold" Background="#FF0E92EE" Grid.Column="1" Grid.ColumnSpan="3" BorderBrush="#FF0C0B0B"/>
+        <Label Content="Segli un server a cui connetterti" Margin="95,0,74,0" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" RenderTransformOrigin="1.133,0.793" Grid.ColumnSpan="3" Grid.Column="1" FontStyle="Italic"/>
+        <ListBox Name="lServers" DisplayMemberPath="Address" FontWeight="Light" BorderBrush="Black"  Grid.Column="1" HorizontalAlignment="Left" Height="138" Margin="32,107,0,0" VerticalAlignment="Top" Width="254" Grid.ColumnSpan="3" SelectionChanged="lServers_SelectionChanged"/>
+        <Button x:Name="CancellaButton"  Content="Cancella" Grid.Column="3" HorizontalAlignment="Left" Margin="142,215,0,0" VerticalAlignment="Top" Width="95" Click="CancellaButton_Click" FontWeight="Bold" Background="#FFEC1414" Height="29" RenderTransformOrigin="1.179,0.862" Foreground="#FF0C0B0B" BorderBrush="#FF050005"/>
+        <Button x:Name="DisconnettiButton" Content="Disconnetti" Visibility="Collapsed" Grid.Column="3" HorizontalAlignment="Left"  Margin="142,163,0,0" VerticalAlignment="Top" Width="95" FontWeight="Bold" Background="#FFEC7614" Height="29" RenderTransformOrigin="0.505,0.172" BorderBrush="#FF0C0B0B" Click="Disconnetti_Click"/>
 
-        <Label x:Name="loading_label" Grid.Column="1" HorizontalAlignment="Left" Margin="116,39,0,0" VerticalAlignment="Top" Width="280" FontSize="14" FontWeight="Bold" FontStyle="Italic" Height="37" Grid.ColumnSpan="3" Background="#00FF0000" Foreground="White"/>
+
+        <Label x:Name="loading_label" Grid.Column="1" HorizontalAlignment="Left" Margin="137,30,0,0" VerticalAlignment="Top" Width="280" FontSize="14" FontWeight="Bold" FontStyle="Italic" Height="37" Grid.ColumnSpan="3" Background="#00FF0000" Foreground="White"/>
 
 
-        <Label Content="                IP" Grid.Column="1" Height="30" HorizontalAlignment="Left" Margin="66,95,0,0" BorderBrush="Black" VerticalAlignment="Top" Width="128" Background="White" FontWeight="Bold" FontStyle="Italic"/>
-        <Label Content="           Porta" Grid.Column="1"  HorizontalAlignment="Left" Height="30" Margin="197,95,0,0" VerticalAlignment="Top" Width="123" Background="White" Grid.ColumnSpan="3" FontWeight="Bold" FontStyle="Italic"/>
-        <Button x:Name="controlla_button" Content="Controlla" Grid.Column="3" HorizontalAlignment="Left" Margin="124,144,0,0" VerticalAlignment="Top" Height="29" Width="95" Click="Controlla_Button_Click" FontWeight="Bold" Background="#FF80E21F"/>
+        <Label Content="                IP                               Porta" Grid.Column="1" Height="29" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Left" Margin="32,78,0,0"  VerticalAlignment="Top"  Width="254"  Background="White" FontWeight="Bold" FontStyle="Italic" Grid.ColumnSpan="3"/>
+        <Button x:Name="controlla_button" Content="Controlla" Grid.Column="3" HorizontalAlignment="Left" Margin="142,109,0,0" VerticalAlignment="Top" Height="29" Width="95" Click="Controlla_Button_Click" FontWeight="Bold" Background="#FF80E21F" BorderBrush="#FF0C0B0B"/>
+        <Grid x:Name="master" Grid.Column="3"  HorizontalAlignment="Left" Margin="87,109,0,0" VerticalAlignment="Top" Width="21" Height="135" Background="White" RenderTransformOrigin="-0.316,0.519"/>
     </Grid>
 </Window>
