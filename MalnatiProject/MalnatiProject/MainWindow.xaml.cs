@@ -151,6 +151,7 @@ namespace MalnatiProject
             else{
                 controlla_button.Content = "Disconnetti";
                 controlla_button.Background = Brushes.Yellow;
+                ((ServerWindow)lServers.SelectedItem).Controlla();
             
             }
         }
