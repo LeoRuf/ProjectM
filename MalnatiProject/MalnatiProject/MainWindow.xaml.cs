@@ -79,6 +79,7 @@ namespace MalnatiProject
                 b.BorderBrush = Brushes.White;
                 b.VerticalAlignment = VerticalAlignment.Top;
                 b.Content = "M";
+                b.BorderBrush = Brushes.Black;
 
 
                 double x = 0;
