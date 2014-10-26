@@ -70,6 +70,7 @@ namespace MalnatiProject
                 }
 
                 int n = serverList.IndexOf(window);
+                window.boss = true;
                 Console.WriteLine(n);
                 Button b= new Button();
                 b.Background= Brushes.Yellow;
@@ -77,22 +78,27 @@ namespace MalnatiProject
                 b.Height =20;
                 b.BorderBrush = Brushes.White;
                 b.VerticalAlignment = VerticalAlignment.Top;
+                b.Content = "M";
 
 
                 double x = 0;
                 double y = 0;
-                for (int i =0; i < n; i++)
-                {
-                    Button b1 = new Button();
-                    b1.Background = Brushes.White;
-                    b1.Width = 20;
-                    b1.Height = 20;
-                    b1.BorderBrush = Brushes.White;
-                    b1.VerticalAlignment = VerticalAlignment.Top;
-                    b1.Margin = new Thickness(x, y +(20*i), 0, 0); 
+
+                //for (int i =0; i < serverList.Count() && i!=n; i++)
+                //{
+                //    Button b1 = new Button();
+                //    b1.Background = Brushes.White;
+                //    b1.Width = 20;
+                //    b1.Height = 20;
+                //    b1.BorderBrush = Brushes.White;
+                //    b1.VerticalAlignment = VerticalAlignment.Top;
+                //    b1.Margin = new Thickness(x, y +(20*i), 0, 0); 
                 
-                    master.Children.Add(b1);
-                }
+                //    master.Children.Add(b1);
+                //}
+
+
+                master.Children.Clear();
                 master.Children.Add(b);
                 b.Margin = new Thickness(x, y + (20 * n), 0, 0); 
                 window.Show();
@@ -131,26 +137,16 @@ namespace MalnatiProject
                 {
                     if (((ServerWindow)lServers.SelectedItem).boss == true)
                     {
-                        int n = serverList.IndexOf((ServerWindow)lServers.SelectedItem);
-                        Console.WriteLine(n);
-                        Console.WriteLine("Entrato");
-
-                        //Button b = new Button();
-                        //b.Background = Brushes.Black;
-                        //b.Width = 20;
-                        //b.Height = 20;
-                        //b.BorderBrush = Brushes.White;
-                        
-                            master.Children.RemoveAt(n);
-                        
-                        //b.Margin = new Thickness(0, 0 + (20 * n), 0, 0);
-                        //master.Children.Add(b);
-
+                        //int n = serverList.IndexOf((ServerWindow)lServers.SelectedItem);
+                        //Console.WriteLine(n);
+                        //Console.WriteLine("Entrato");
+                            master.Children.RemoveAt(0);
                     }
                     loading_label.Content = "Cancellazione server in corso...";
                     ((ServerWindow)lServers.SelectedItem).Disconnetti();
                 }
                 serverList.Remove(lServers.SelectedItem as ServerWindow);
+            
             
                 cancella_premuto = false;
             }
@@ -207,18 +203,17 @@ namespace MalnatiProject
 
                     if (((ServerWindow)lServers.SelectedItem).boss == true)
                     {
-                        int n = serverList.IndexOf((ServerWindow)lServers.SelectedItem);
-                        Console.WriteLine(n);
-                        Console.WriteLine("Entrato");
-                        master.Children.RemoveAt(n);
-
+                        //int n = serverList.IndexOf((ServerWindow)lServers.SelectedItem);
+                        //Console.WriteLine(n);
+                        //Console.WriteLine("Entrato");
+                        master.Children.RemoveAt(0);
                     }
                     loading_label.Content = "Disconnessione in corso...";
                     ((ServerWindow)lServers.SelectedItem).Disconnetti();
+                  
                 }
                 
             }
         }
-
   }
 }

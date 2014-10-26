@@ -83,13 +83,14 @@ namespace MalnatiProject
                         socket.RemoteEndPoint.ToString());
 
                     socket.Send(Encoding.UTF8.GetBytes(password));
-
+                    socket.ReceiveTimeout = 4000;
                     socket.Receive(rec);
 
                     if (Encoding.UTF8.GetString(rec).Trim('\0').Equals(password)) { }
                     else
                     {
                         MessageBox.Show("Password errata");
+                        rif.Enable_Buttons();
                         return;
                     }
                     
@@ -110,10 +111,22 @@ namespace MalnatiProject
                 }
                 catch (SocketException se)
                 {
-                    Console.WriteLine("SocketException : {0}", se.ToString());
-                    MessageBox.Show("Impossibile connettersi...");
-                    rif.Enable_Buttons();
-                    return;
+                    if (se.ErrorCode == 10060)
+                    {
+                        Console.WriteLine("SocketException : {0}", se.ToString());
+                        MessageBox.Show("Timeout scaduto...");
+                        rif.Enable_Buttons();
+                        return;
+                    
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("SocketException : {0}", se.ToString());
+                        MessageBox.Show("Impossibile connettersi...");
+                        rif.Enable_Buttons();
+                        return;
+                    }
                 }
                 catch (Exception e)
                 {
@@ -125,7 +138,6 @@ namespace MalnatiProject
                 }
 
                 connesso = true;
-                boss = true;
                 rif.Change_Focus(this);
 
         }
@@ -194,10 +206,10 @@ namespace MalnatiProject
 
             byte[] string_send = Encoding.UTF8.GetBytes(x+";"+y+ "?");
             Console.WriteLine("You moved me at " + e.GetPosition(this).ToString());
-            //socket.Send(string_send);
             try
             {
                 //socket.Send(string_send);
+                //socket.SendBufferSize = 1024;
                 socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
             }
             catch (SocketException) {
@@ -264,6 +276,7 @@ namespace MalnatiProject
                             if(rif.serverList.IndexOf(this)<rif.serverList.IndexOf(ser) && ser.socket!=null && ser.isConnesso()==true){
 
                                 rif.Change_Focus(ser);
+                                boss = false;
                                 break;
                             }
                         }
