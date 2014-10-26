@@ -83,7 +83,7 @@ namespace MalnatiProject
                         socket.RemoteEndPoint.ToString());
 
                     socket.Send(Encoding.UTF8.GetBytes(password));
-                    socket.ReceiveTimeout = 4000;
+                    socket.ReceiveTimeout = 5000;
                     socket.Receive(rec);
 
                     if (Encoding.UTF8.GetString(rec).Trim('\0').Equals(password)) { }
@@ -194,6 +194,7 @@ namespace MalnatiProject
                 MessageBox.Show("Connessione caduta");
                 this.Hide();
                 this.Disconnetti();
+                rif.master.Children.Clear();
             }
             
         }
@@ -215,7 +216,9 @@ namespace MalnatiProject
             catch (SocketException) {
                 MessageBox.Show("Connessione caduta");
                 this.Hide();
-                this.Disconnetti(); 
+                this.Disconnetti();
+                rif.master.Children.Clear();
+            
             }
             
         }
@@ -235,6 +238,8 @@ namespace MalnatiProject
                 MessageBox.Show("Connessione caduta");
                 this.Hide();
                 this.Disconnetti();
+                rif.master.Children.Clear();
+            
             }
             
         }
@@ -253,6 +258,8 @@ namespace MalnatiProject
                 MessageBox.Show("Connessione caduta");
                 this.Hide();
                 this.Disconnetti();
+                rif.master.Children.Clear();
+            
             }
             
         }
