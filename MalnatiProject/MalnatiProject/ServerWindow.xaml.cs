@@ -147,6 +147,7 @@ namespace MalnatiProject
 
             if (isConnesso() == true && socket!=null) { 
                 rif.Change_Focus(this); 
+                
             }
             else{
                 Connetti();
@@ -201,11 +202,11 @@ namespace MalnatiProject
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
-
+            socket.NoDelay = true;
             double x = e.GetPosition(this).X /System.Windows.SystemParameters.PrimaryScreenWidth;
             double y = e.GetPosition(this).Y / System.Windows.SystemParameters.PrimaryScreenHeight;
 
-            byte[] string_send = Encoding.UTF8.GetBytes(x+";"+y+ "?");
+            byte[] string_send = Encoding.UTF8.GetBytes(x+";"+ y + "?");
             Console.WriteLine("You moved me at " + e.GetPosition(this).ToString());
             try
             {
@@ -280,7 +281,8 @@ namespace MalnatiProject
                         Console.WriteLine("S");
                         foreach (ServerWindow ser in rif.serverList)
                         {
-                            if(rif.serverList.IndexOf(this)<rif.serverList.IndexOf(ser) && ser.socket!=null && ser.isConnesso()==true){
+                            if (rif.serverList.IndexOf(this) < rif.serverList.IndexOf(ser) && ser.socket != null && ser.isConnesso() == true)
+                            {
 
                                 rif.Change_Focus(ser);
                                 boss = false;
@@ -291,13 +293,21 @@ namespace MalnatiProject
                         rif.Show();
                         this.Hide();
                         break;
-                  
+
                     default:
                         Console.WriteLine("Default case");
                         break;
-                 
-                } 
+
+                }
             }
+            //else
+            //{
+            //    byte[] string_send = Encoding.UTF8.GetBytes(e.Key.GetTypeCode());
+            //    //Console.WriteLine("You clicked me at " + e.GetPosition(this).ToString());
+            //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+
+                
+            //}
 
         }
 

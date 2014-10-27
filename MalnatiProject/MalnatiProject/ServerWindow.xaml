@@ -5,10 +5,8 @@
     <Grid x:Name="grid" Background="LightBlue" MouseUp="Grid_MouseUp" MouseMove="Grid_MouseMove" MouseDown="Grid_MouseDown" MouseRightButtonUp="Grid_MouseRightButtonUp" KeyDown="Grid_KeyDown" Loaded="Grid_Loaded" Focusable="True" >
         <Label Content="Lista shortcuts: " Height="26" Width="150" Margin="20,379,630,195"  FontSize="14" FontWeight="Bold" FontStyle="Italic"/>
         <Label  Height="26" Width="120" Content="Cambia focus: " Margin="10,468,650,106"  FontSize="14" FontWeight="Light"/>
-        <Label  Height="28" Margin="231,508,449,64"  Content="          CTRL + " BorderThickness="1" BorderBrush="Black"  Width="120"  FontWeight="Bold" Background="#FF4B79DE" FontStyle="Italic"  />
         <Label  Height="28" Margin="231,466,449,106"  Content="          CTRL + S " BorderThickness="1" BorderBrush="Black"  Width="120" FontWeight="Bold" Background="#FF6BCB35" FontStyle="Italic"/>
         <Label  Height="26" Width="120" Content="Ritorna al client:"  FontWeight="Light"  FontSize="14" Margin="20,423,660,151"/>
         <Label  Height="28" Margin="231,424,449,148" BorderThickness="1" BorderBrush="Black" Content="          CTRL + D"  Width="120"  FontWeight="Bold" Background="#FFDCA8A8" FontStyle="Italic"/>
-        <Label  Height="26" Width="120" Content="Copia clipboard:" Margin="20,508,660,66" FontWeight="Light"  FontSize="14"/>
     </Grid>
 </Window>
