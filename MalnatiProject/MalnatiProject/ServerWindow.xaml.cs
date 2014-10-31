@@ -19,6 +19,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 
+
 namespace MalnatiProject
 {
     partial class ServerWindow : Window
@@ -48,6 +49,7 @@ namespace MalnatiProject
                 return true;
             
             return false;
+            
         }
 
         public ServerWindow(String ip, Int16 porta, String password)
