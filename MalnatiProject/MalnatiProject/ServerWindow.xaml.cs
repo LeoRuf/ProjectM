@@ -306,30 +306,153 @@ namespace MalnatiProject
             {
                 try
                 {
-                    if (e.Key == Key.H)
-                    {
-                        MessageBox.Show("Ho premuto h");
-                        byte[] string_send = Encoding.UTF8.GetBytes("h");
+                    //if (e.Key == Key.Q)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("q");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.W)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("W");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.E)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("e");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.R)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("r");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.T)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("t");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.Y)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("y");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.U)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("u");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.I)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("i");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.O)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("o");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.P)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("p");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.A)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("a");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+
+                    //if (e.Key == Key.S)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("s");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.D)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("d");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.F)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("f");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.G)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("g");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.H)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("h");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.J)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("j");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.K)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("k");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.L)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("l");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.Z)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("z");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.X)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("x");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.C)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("c");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.V)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("v");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.B)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("b");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.N)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("n");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //} 
+                    //if (e.Key == Key.M)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("m");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.Space)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes(" ");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    //if (e.Key == Key.CapsLock)
+                    //{
+                    //    byte[] string_send = Encoding.UTF8.GetBytes("-");
+                    //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    //}
+                    
+                        byte[] string_send = Encoding.UTF8.GetBytes(e.Key.ToString());
+                        //MessageBox.Show(e.Key.ToString());
                         socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                    }
-                    if (e.Key == Key.E)
-                    {
-                        MessageBox.Show("Ho premuto e");
-                        byte[] string_send = Encoding.UTF8.GetBytes("e");
-                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                    }
-                    if (e.Key == Key.L)
-                    {
-                        MessageBox.Show("Ho premuto l");
-                        byte[] string_send = Encoding.UTF8.GetBytes("l");
-                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                    }
-                    if (e.Key == Key.O)
-                    {
-                        MessageBox.Show("Ho premuto o");
-                        byte[] string_send = Encoding.UTF8.GetBytes("o");
-                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                    }
+                    
+                    
                     
                 }
                 catch (SocketException)
