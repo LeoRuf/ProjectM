@@ -302,14 +302,45 @@ namespace MalnatiProject
 
                 }
             }
-            //else
-            //{
-            //    byte[] string_send = Encoding.UTF8.GetBytes(e.Key.GetTypeCode());
-            //    //Console.WriteLine("You clicked me at " + e.GetPosition(this).ToString());
-            //    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            else
+            {
+                try
+                {
+                    if (e.Key == Key.H)
+                    {
+                        MessageBox.Show("Ho premuto h");
+                        byte[] string_send = Encoding.UTF8.GetBytes("h");
+                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    }
+                    if (e.Key == Key.E)
+                    {
+                        MessageBox.Show("Ho premuto e");
+                        byte[] string_send = Encoding.UTF8.GetBytes("e");
+                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    }
+                    if (e.Key == Key.L)
+                    {
+                        MessageBox.Show("Ho premuto l");
+                        byte[] string_send = Encoding.UTF8.GetBytes("l");
+                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    }
+                    if (e.Key == Key.O)
+                    {
+                        MessageBox.Show("Ho premuto o");
+                        byte[] string_send = Encoding.UTF8.GetBytes("o");
+                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    }
+                    
+                }
+                catch (SocketException)
+                {
+                    MessageBox.Show("Connessione caduta");
+                    this.Hide();
+                    this.Disconnetti();
+                    rif.master.Children.Clear();
 
-                
-            //}
+                }
+            }
 
         }
 
