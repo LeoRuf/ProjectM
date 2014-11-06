@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace MalnatiProject
 {
@@ -38,6 +39,7 @@ namespace MalnatiProject
             IPAddress ipAddress = null;
             bool isValidPorta=true;
             bool isValidPassword = true;
+            bool isValidIp = true;
 
 
 
@@ -59,14 +61,23 @@ namespace MalnatiProject
 
 
             }
+             string pattern = @"^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$";
+             Regex check = new Regex(pattern);
+             if (myIpString == null)
+             {
+                 isValidIp = false;
+             }
+             else
+             {
+                 isValidIp = check.IsMatch(myIpString, 0);
+             }
 
-
-            bool isValidIp = IPAddress.TryParse(myIpString, out ipAddress);
-
+            //isValidIp = IPAddress.TryParse(myIpString, out ipAddress);
+            
             if (isValidIp == false)
-            {
-                MessageBox.Show("IP non valido o mancante");
-            }
+                {
+                    MessageBox.Show("IP non valido o mancante");
+                }
             
             if (isValidIp == true && isValidPassword==true && isValidPorta==true)
             {
