@@ -311,17 +311,10 @@ namespace MalnatiProject
                 try
                 {
 
-                    //Key k= new Key();
-                    String s = e.Key.ToString();
-
-                    //InputSimulator.SimulateKeyPress();
-                    ////VirtualKeyCode.
-                    //InputSimulator.SimulateKeyPress()
-                    //KeyInterop.KeyFromVirtualKey(48);
                     Console.WriteLine(e.Key.ToString() + "\n");
-                    int valoreHex = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
-                    Console.WriteLine(valoreHex.ToString("X"));
-                    byte[] string_send = Encoding.UTF8.GetBytes("-" + valoreHex.ToString("X") + "-");
+                    int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
+                    Console.WriteLine(valore.ToString());
+                    byte[] string_send = Encoding.UTF8.GetBytes("-X" + valore.ToString() + "-");
                     socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
 
 
@@ -338,6 +331,31 @@ namespace MalnatiProject
             }
 
         }
+
+        private void Grid_KeyUp(object sender, KeyEventArgs e)
+        {
+            socket.NoDelay = true;
+                try
+                {
+
+                    Console.WriteLine(e.Key.ToString() + "\n");
+                    int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
+                    Console.WriteLine(valore.ToString());
+                    byte[] string_send = Encoding.UTF8.GetBytes("-Y" + valore.ToString() + "-");
+                    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                }
+                catch (SocketException)
+                {
+                    MessageBox.Show("Connessione caduta");
+                    this.Hide();
+                    this.Disconnetti();
+                    rif.master.Children.Clear();
+
+                }
+            
+
+        }
+
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
