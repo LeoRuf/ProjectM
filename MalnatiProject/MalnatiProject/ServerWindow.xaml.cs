@@ -18,7 +18,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
-
+using WindowsInput;
 
 namespace MalnatiProject
 {
@@ -29,7 +29,7 @@ namespace MalnatiProject
         public Int16 porta;
         public String password;
         public Socket socket;
-        byte[] rec= new byte[64];
+        byte[] rec = new byte[64];
         public MainWindow rif;
         public static ManualResetEvent allDone = new ManualResetEvent(false);
         bool connesso = false;
@@ -38,18 +38,18 @@ namespace MalnatiProject
 
         public String Address
         {
-           
-            get { return     "       " + ip + "                         " + Convert.ToString(porta);} 
-            set{}
+
+            get { return "       " + ip + "                         " + Convert.ToString(porta); }
+            set { }
         }
 
         public bool isConnesso()
         {
             if (connesso == true)
                 return true;
-            
+
             return false;
-            
+
         }
 
         public ServerWindow(String ip, Int16 porta, String password)
@@ -65,93 +65,95 @@ namespace MalnatiProject
 
         public String ToString()
         {
-            return this.ip + "    " + this.porta; 
+            return this.ip + "    " + this.porta;
 
         }
 
         public void Connetti()
         {
-                try
+            try
+            {
+                IPEndPoint lep = new IPEndPoint(IPAddress.Parse(ip), Convert.ToInt16(porta));
+                Console.WriteLine("Sto per fare la connect");
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+
+
+                socket.Connect(lep);
+
+                Console.WriteLine("Socket connected to {0}",
+                    socket.RemoteEndPoint.ToString());
+
+                socket.Send(Encoding.UTF8.GetBytes(password));
+                socket.ReceiveTimeout = 5000;
+                socket.Receive(rec);
+
+                if (Encoding.UTF8.GetString(rec).Trim('\0').Equals(password)) { }
+                else
                 {
-                    IPEndPoint lep = new IPEndPoint(IPAddress.Parse(ip), Convert.ToInt16(porta));
-                    Console.WriteLine("Sto per fare la connect");
-                    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-                   
-
-                    socket.Connect(lep);
-                    
-                    Console.WriteLine("Socket connected to {0}",
-                        socket.RemoteEndPoint.ToString());
-
-                    socket.Send(Encoding.UTF8.GetBytes(password));
-                    socket.ReceiveTimeout = 5000;
-                    socket.Receive(rec);
-
-                    if (Encoding.UTF8.GetString(rec).Trim('\0').Equals(password)) { }
-                    else
-                    {
-                        MessageBox.Show("Password errata");
-                        rif.Enable_Buttons();
-                        return;
-                    }
-                    
-
-                    IPEndPoint remoteEndPoint = (IPEndPoint)socket.RemoteEndPoint;
-                    Console.WriteLine("Connected to {0}:{1}", remoteEndPoint.Address, remoteEndPoint.Port);
-
-
+                    MessageBox.Show("Password errata");
+                    rif.Enable_Buttons();
+                    return;
                 }
-                catch (ArgumentNullException ane)
+
+
+                IPEndPoint remoteEndPoint = (IPEndPoint)socket.RemoteEndPoint;
+                Console.WriteLine("Connected to {0}:{1}", remoteEndPoint.Address, remoteEndPoint.Port);
+
+
+            }
+            catch (ArgumentNullException ane)
+            {
+                //Unica eccezione, non tre diverse
+                Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
+                MessageBox.Show("Impossibile connettersi...");
+                rif.Enable_Buttons();
+                return;
+
+            }
+            catch (SocketException se)
+            {
+                if (se.ErrorCode == 10060)
                 {
-                    //Unica eccezione, non tre diverse
-                    Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
-                    MessageBox.Show("Impossibile connettersi...");
+                    Console.WriteLine("SocketException : {0}", se.ToString());
+                    MessageBox.Show("Timeout scaduto...");
                     rif.Enable_Buttons();
                     return;
 
-                }
-                catch (SocketException se)
-                {
-                    if (se.ErrorCode == 10060)
-                    {
-                        Console.WriteLine("SocketException : {0}", se.ToString());
-                        MessageBox.Show("Timeout scaduto...");
-                        rif.Enable_Buttons();
-                        return;
-                    
 
-                    }
-                    else
-                    {
-                        Console.WriteLine("SocketException : {0}", se.ToString());
-                        MessageBox.Show("Impossibile connettersi...");
-                        rif.Enable_Buttons();
-                        return;
-                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                    Console.WriteLine("SocketException : {0}", se.ToString());
                     MessageBox.Show("Impossibile connettersi...");
                     rif.Enable_Buttons();
                     return;
-
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                MessageBox.Show("Impossibile connettersi...");
+                rif.Enable_Buttons();
+                return;
 
-                connesso = true;
-                rif.Change_Focus(this);
+            }
+
+            connesso = true;
+            rif.Change_Focus(this);
 
         }
 
         public void Controlla()
         {
 
-            if (isConnesso() == true && socket!=null) { 
-                rif.Change_Focus(this); 
-                
+            if (isConnesso() == true && socket != null)
+            {
+                rif.Change_Focus(this);
+
             }
-            else{
+            else
+            {
                 Connetti();
 
             }
@@ -164,7 +166,7 @@ namespace MalnatiProject
             socket.Close();
             rif.DisconnettiButton.Visibility = Visibility.Collapsed;
             rif.loading_label.Content = "";
-           
+
         }
 
         //public static void ConnectCallback1(IAsyncResult ar)
@@ -199,16 +201,16 @@ namespace MalnatiProject
                 this.Disconnetti();
                 rif.master.Children.Clear();
             }
-            
+
         }
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
             socket.NoDelay = true;
-            double x = e.GetPosition(this).X /System.Windows.SystemParameters.PrimaryScreenWidth;
+            double x = e.GetPosition(this).X / System.Windows.SystemParameters.PrimaryScreenWidth;
             double y = e.GetPosition(this).Y / System.Windows.SystemParameters.PrimaryScreenHeight;
 
-            byte[] string_send = Encoding.UTF8.GetBytes(x+";"+ y + "?");
+            byte[] string_send = Encoding.UTF8.GetBytes(x + ";" + y + "?");
             Console.WriteLine("You moved me at " + e.GetPosition(this).ToString());
             try
             {
@@ -216,14 +218,15 @@ namespace MalnatiProject
                 //socket.SendBufferSize = 1024;
                 socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
             }
-            catch (SocketException) {
+            catch (SocketException)
+            {
                 MessageBox.Show("Connessione caduta");
                 this.Hide();
                 this.Disconnetti();
                 rif.master.Children.Clear();
-            
+
             }
-            
+
         }
 
         public static void BeginSendCallback(IAsyncResult ar) { }
@@ -242,9 +245,9 @@ namespace MalnatiProject
                 this.Hide();
                 this.Disconnetti();
                 rif.master.Children.Clear();
-            
+
             }
-            
+
         }
 
         private void Grid_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
@@ -262,9 +265,9 @@ namespace MalnatiProject
                 this.Hide();
                 this.Disconnetti();
                 rif.master.Children.Clear();
-            
+
             }
-            
+
         }
 
         private void Grid_KeyDown(object sender, KeyEventArgs e)
@@ -307,13 +310,22 @@ namespace MalnatiProject
             {
                 try
                 {
+
+                    //Key k= new Key();
+                    String s = e.Key.ToString();
+
+                    //InputSimulator.SimulateKeyPress();
+                    ////VirtualKeyCode.
+                    //InputSimulator.SimulateKeyPress()
+                    //KeyInterop.KeyFromVirtualKey(48);
+                    Console.WriteLine(e.Key.ToString() + "\n");
                     int valoreHex = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
                     Console.WriteLine(valoreHex.ToString("X"));
-                        byte[] string_send = Encoding.UTF8.GetBytes("-"+valoreHex.ToString("X")+"-");
-                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                    
-                    
-                    
+                    byte[] string_send = Encoding.UTF8.GetBytes("-" + valoreHex.ToString("X") + "-");
+                    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+
+
+
                 }
                 catch (SocketException)
                 {
@@ -334,5 +346,7 @@ namespace MalnatiProject
 
 
 
+
     }
+    
 }
