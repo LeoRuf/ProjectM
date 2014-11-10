@@ -32,8 +32,10 @@ namespace MalnatiProject
     public partial class MainWindow : Window
     {
         public ObservableCollection<ServerWindow> serverList = new ObservableCollection<ServerWindow>();
+        FtpClient ftpClient;
         private Dispatcher dispatcher;
         bool cancella_premuto = false;
+        bool isFTPConnesso = false;
         
         
 
@@ -41,9 +43,9 @@ namespace MalnatiProject
         {
             InitializeComponent();
             dispatcher = Dispatcher.CurrentDispatcher;
-            serverList.Add(new ServerWindow("192.168.1.135", 1601, "ciao"));
+            serverList.Add(new ServerWindow("192.168.1.132", 1601, "ciao"));
             lServers.ItemsSource=serverList;
-            Clipboard.SetData(DataFormats.Text, "Ciao");
+            
             
 
         }
@@ -55,6 +57,12 @@ namespace MalnatiProject
             add.Show();
             add.rif = this;
 
+        }
+
+        public void DoRetrieve() {
+            Thread workerThread2 = new Thread(ftpClient.Retrieve);
+            workerThread2.Start();
+                      
         }
 
 
@@ -104,7 +112,15 @@ namespace MalnatiProject
 
                 master.Children.Clear();
                 master.Children.Add(b);
-                b.Margin = new Thickness(x, y + (20 * n), 0, 0); 
+                b.Margin = new Thickness(x, y + (20 * n), 0, 0);
+
+                if (isFTPConnesso == false)
+                {
+                    ftpClient = new FtpClient(window.porta);
+                    ftpClient.Connetti(IPAddress.Parse(window.ip));
+                    ftpClient.porta();
+                    isFTPConnesso = true;
+                }
                 window.Show();
 
             };
@@ -172,7 +188,8 @@ namespace MalnatiProject
                         (lServers.SelectedItem as ServerWindow).rif = this;
                         Thread workerThread1 = new Thread((lServers.SelectedItem as ServerWindow).Controlla);
                         workerThread1.Start();
-                    
+                        
+                       
                     
                 }
            

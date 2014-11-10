@@ -34,6 +34,7 @@ namespace MalnatiProject
         public static ManualResetEvent allDone = new ManualResetEvent(false);
         bool connesso = false;
         public bool boss = false;
+       
 
 
         public String Address
@@ -140,6 +141,7 @@ namespace MalnatiProject
             }
 
             connesso = true;
+
             rif.Change_Focus(this);
 
         }
@@ -298,6 +300,10 @@ namespace MalnatiProject
 
                         rif.Show();
                         this.Hide();
+                        break;
+                    case Key.L:
+                        Console.WriteLine("L");
+                        rif.DoRetrieve();
                         break;
 
                     default:
