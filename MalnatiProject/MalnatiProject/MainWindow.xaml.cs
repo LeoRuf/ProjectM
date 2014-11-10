@@ -20,6 +20,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using WindowsInput;
+using System.Collections.Specialized;
 
 
 
@@ -43,7 +44,7 @@ namespace MalnatiProject
         {
             InitializeComponent();
             dispatcher = Dispatcher.CurrentDispatcher;
-            serverList.Add(new ServerWindow("192.168.1.132", 1601, "ciao"));
+            serverList.Add(new ServerWindow("192.168.1.135", 1601, "ciao"));
             lServers.ItemsSource=serverList;
             
             
@@ -62,7 +63,17 @@ namespace MalnatiProject
         public void DoRetrieve() {
             Thread workerThread2 = new Thread(ftpClient.Retrieve);
             workerThread2.Start();
-                      
+        }
+
+        public void SetClip(StringCollection s)
+        {
+            Action action = () =>
+            {
+                Console.WriteLine("Sto settando clipboard");
+                Clipboard.SetFileDropList(s);
+            };
+
+            dispatcher.BeginInvoke(action);
         }
 
 
@@ -119,6 +130,7 @@ namespace MalnatiProject
                     ftpClient = new FtpClient(window.porta);
                     ftpClient.Connetti(IPAddress.Parse(window.ip));
                     ftpClient.porta();
+                    ftpClient.rif = this;
                     isFTPConnesso = true;
                 }
                 window.Show();
