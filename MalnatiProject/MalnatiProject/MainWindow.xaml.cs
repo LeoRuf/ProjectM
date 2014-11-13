@@ -42,7 +42,7 @@ namespace MalnatiProject
         {
             InitializeComponent();
             dispatcher = Dispatcher.CurrentDispatcher;
-            serverList.Add(new ServerWindow("192.168.1.131", 1601, "c"));
+            serverList.Add(new ServerWindow("192.168.1.135", 1601, "c"));
             lServers.ItemsSource = serverList;
         }
 
@@ -53,13 +53,16 @@ namespace MalnatiProject
             add.rif = this;
         }
 
+       
+
         //public void DoRetrieve()
         //{
         //    Thread workerThread2 = new Thread(ftpClient.Retrieve);
         //    workerThread2.Start();
         //}
 
-        public void SetClip(StringCollection s)
+
+   public void SetClip(StringCollection s)
         {
             Action action = () =>
             {

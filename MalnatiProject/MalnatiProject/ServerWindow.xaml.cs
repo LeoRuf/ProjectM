@@ -22,16 +22,15 @@ using System.Text.RegularExpressions;
 
 namespace MalnatiProject
 {
-    partial class ServerWindow : Window
+    public partial class ServerWindow : Window
     {
         public String ip; //del server
         public Int16 porta;  //del server
         public String password;
         public Socket socket;
         byte[] rec = new byte[64];
-
         public MainWindow rif;
-        public static ManualResetEvent allDone = new ManualResetEvent(false);
+       public static ManualResetEvent allDone = new ManualResetEvent(false);
 
         bool connesso = false;
         public bool boss = false;
@@ -59,6 +58,7 @@ namespace MalnatiProject
 
         public ServerWindow(String ip, Int16 porta, String password)
         {
+            
             InitializeComponent();
             this.ip = ip;
             this.porta = porta;
@@ -113,7 +113,7 @@ namespace MalnatiProject
                         Console.WriteLine("Connected to {0}:{1}", remoteEndPoint.Address, remoteEndPoint.Port);
                         socket.Send(Encoding.UTF8.GetBytes("ready"));
                         connesso = true;
-                        ftpClient.setRif(rif);
+                        ftpClient.setRif(rif,this);
                         rif.Change_Focus(this);
                     }
                     else
@@ -387,5 +387,5 @@ namespace MalnatiProject
             grid.Focus();
         }
 
-    }
+     }
 }

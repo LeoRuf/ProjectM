@@ -39,8 +39,10 @@ namespace MalnatiProject
         string hostname;
         private bool connesso;
         bool isDir = false;
+        public string sizeFile;
 
         public MainWindow rif;
+        public ServerWindow rif_server;
 
         public bool Connesso
         {
@@ -68,9 +70,10 @@ namespace MalnatiProject
             ipLocalAddress = localAddress;
         }
 
-        public void setRif(MainWindow main)
+        public void setRif(MainWindow main,ServerWindow ser)
         {
             rif = main;
+            rif_server=ser;
         }
 
         public bool Connetti(IPAddress ipRemoteAddress)
@@ -180,7 +183,7 @@ namespace MalnatiProject
         {
             char[] string_line = new char[4096];
             byte[] buffer = new byte[4096];
-            int total = 0;
+            long total = 0;
             int count = 0;
             bool ricevuto = false;
             isDir = false;
@@ -227,6 +230,12 @@ namespace MalnatiProject
                     dataStreamW.Flush();
                 }
 
+                string size = dataStreamR.ReadLine();
+                sizeFile = size;
+                //MessageBox.Show(size);
+                dataStreamW.WriteLine("go");
+                dataStreamW.Flush();
+
                 filePath = "C:\\temp\\" + fileName;
                 if (File.Exists(filePath))
                 {
@@ -245,13 +254,23 @@ namespace MalnatiProject
                         {
                             bWriter.Write(buffer, 0, count);
                             total += count;
+                            
                         }
                     }
                 }
-                file.Close();
-                dataStreamR.Close();
-                Console.WriteLine("File ricevuto!");
-                ricevuto = true;
+                if (total == Convert.ToInt64(size))
+                {
+                    file.Close();
+                    dataStreamR.Close();
+                    Console.WriteLine("File ricevuto!");
+                    ricevuto = true;
+                }
+                else {
+                    file.Close();
+                    dataStreamR.Close();
+                    MessageBox.Show("File non completamente ricevuto!");
+                    ricevuto = false;
+                }
                 
                 //}
 
@@ -275,10 +294,9 @@ namespace MalnatiProject
             catch (Exception)
             {
                 file.Close();
-                if (ricevuto == false)
-                    
+                if (ricevuto == false) {
                     File.Delete(filePath);
-                    
+                } 
                 if (dataListener != null)
                     dataListener.Stop();
                 if (dataConnection != null)
