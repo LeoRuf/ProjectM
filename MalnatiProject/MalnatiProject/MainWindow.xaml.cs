@@ -33,37 +33,31 @@ namespace MalnatiProject
     public partial class MainWindow : Window
     {
         public ObservableCollection<ServerWindow> serverList = new ObservableCollection<ServerWindow>();
-        FtpClient ftpClient;
         private Dispatcher dispatcher;
         bool cancella_premuto = false;
         bool isFTPConnesso = false;
-        
-        
 
-        public MainWindow() 
+
+        public MainWindow()
         {
             InitializeComponent();
             dispatcher = Dispatcher.CurrentDispatcher;
-            serverList.Add(new ServerWindow("192.168.1.135", 1601, "ciao"));
-            lServers.ItemsSource=serverList;
-            
-            
-
+            serverList.Add(new ServerWindow("192.168.1.131", 1601, "c"));
+            lServers.ItemsSource = serverList;
         }
 
         private void aggiungi_button_Click(object sender, RoutedEventArgs e)
         {
-
             AddServer add = new AddServer();
             add.Show();
             add.rif = this;
-
         }
 
-        public void DoRetrieve() {
-            Thread workerThread2 = new Thread(ftpClient.Retrieve);
-            workerThread2.Start();
-        }
+        //public void DoRetrieve()
+        //{
+        //    Thread workerThread2 = new Thread(ftpClient.Retrieve);
+        //    workerThread2.Start();
+        //}
 
         public void SetClip(StringCollection s)
         {
@@ -71,13 +65,13 @@ namespace MalnatiProject
             {
                 Console.WriteLine("Sto settando clipboard");
                 Clipboard.SetFileDropList(s);
+                MessageBox.Show("Clipboard copiata!");
             };
 
             dispatcher.BeginInvoke(action);
         }
 
-
-       public void Change_Focus(ServerWindow window)
+        public void Change_Focus(ServerWindow window)
         {
             Action action = () =>
             {
@@ -86,7 +80,7 @@ namespace MalnatiProject
                 CancellaButton.IsEnabled = true;
                 loading_label.Content = "";
 
-                if (window.isConnesso() == true)
+                if (window.Connesso == true)
                 {
                     this.DisconnettiButton.Visibility = Visibility.Visible;
                 }
@@ -94,10 +88,10 @@ namespace MalnatiProject
                 int n = serverList.IndexOf(window);
                 window.boss = true;
                 Console.WriteLine(n);
-                Button b= new Button();
-                b.Background= Brushes.Yellow;
-                b.Width =20;
-                b.Height =20;
+                Button b = new Button();
+                b.Background = Brushes.Yellow;
+                b.Width = 20;
+                b.Height = 20;
                 b.BorderBrush = Brushes.White;
                 b.VerticalAlignment = VerticalAlignment.Top;
                 b.Content = "M";
@@ -116,7 +110,7 @@ namespace MalnatiProject
                 //    b1.BorderBrush = Brushes.White;
                 //    b1.VerticalAlignment = VerticalAlignment.Top;
                 //    b1.Margin = new Thickness(x, y +(20*i), 0, 0); 
-                
+
                 //    master.Children.Add(b1);
                 //}
 
@@ -125,22 +119,11 @@ namespace MalnatiProject
                 master.Children.Add(b);
                 b.Margin = new Thickness(x, y + (20 * n), 0, 0);
 
-                if (isFTPConnesso == false)
-                {
-                    ftpClient = new FtpClient(window.porta);
-                    ftpClient.Connetti(IPAddress.Parse(window.ip));
-                    ftpClient.porta();
-                    ftpClient.rif = this;
-                    isFTPConnesso = true;
-                }
                 window.Show();
-
             };
 
             dispatcher.BeginInvoke(action);
         }
-
-        
 
         public void Enable_Buttons()
         {
@@ -165,55 +148,51 @@ namespace MalnatiProject
             }
             else
             {
-                if (((ServerWindow)lServers.SelectedItem).isConnesso() == true)
+                if (((ServerWindow)lServers.SelectedItem).Connesso == true)
                 {
                     if (((ServerWindow)lServers.SelectedItem).boss == true)
                     {
                         //int n = serverList.IndexOf((ServerWindow)lServers.SelectedItem);
                         //Console.WriteLine(n);
                         //Console.WriteLine("Entrato");
-                            master.Children.RemoveAt(0);
+                        master.Children.RemoveAt(0);
                     }
                     loading_label.Content = "Cancellazione server in corso...";
                     ((ServerWindow)lServers.SelectedItem).Disconnetti();
                 }
                 serverList.Remove(lServers.SelectedItem as ServerWindow);
-            
-            
+
+
                 cancella_premuto = false;
             }
         }
 
-      
-
         private void Controlla_Button_Click(object sender, RoutedEventArgs e)
         {
             if (lServers.SelectedItem == null)
-                {
-                    MessageBox.Show("Seleziona un server");
-                }
-           else{
-                        controlla_button.IsEnabled = false;
-                        CancellaButton.IsEnabled = false;
-                        DisconnettiButton.IsEnabled = false;
-                        loading_label.Content = "Controllo in corso...";
-                        (lServers.SelectedItem as ServerWindow).rif = this;
-                        Thread workerThread1 = new Thread((lServers.SelectedItem as ServerWindow).Controlla);
-                        workerThread1.Start();
-                        
-                       
-                    
-                }
-           
+            {
+                MessageBox.Show("Seleziona un server");
+            }
+            else
+            {
+                controlla_button.IsEnabled = false;
+                CancellaButton.IsEnabled = false;
+                DisconnettiButton.IsEnabled = false;
+                loading_label.Content = "Controllo in corso...";
+                (lServers.SelectedItem as ServerWindow).rif = this;
+                //eventuale connessione mouse+tastiera+client ftp
+                Thread workerThread1 = new Thread((lServers.SelectedItem as ServerWindow).Controlla);
+                workerThread1.Start();
+            }
         }
 
         private void lServers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cancella_premuto == false)
             {
-                if (((ServerWindow)lServers.SelectedItem).isConnesso() == false)
+                if (((ServerWindow)lServers.SelectedItem).Connesso == false)
                 {
-                    DisconnettiButton.Visibility = Visibility.Collapsed; 
+                    DisconnettiButton.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
@@ -231,7 +210,7 @@ namespace MalnatiProject
             }
             else
             {
-                if (((ServerWindow)lServers.SelectedItem).isConnesso() == true)
+                if (((ServerWindow)lServers.SelectedItem).Connesso == true)
                 {
 
                     if (((ServerWindow)lServers.SelectedItem).boss == true)
@@ -243,9 +222,9 @@ namespace MalnatiProject
                     }
                     loading_label.Content = "Disconnessione in corso...";
                     ((ServerWindow)lServers.SelectedItem).Disconnetti();
-                  
+
                 }
-                
+
             }
         }
 

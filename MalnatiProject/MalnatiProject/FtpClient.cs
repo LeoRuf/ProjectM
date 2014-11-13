@@ -17,13 +17,13 @@ using System.Net.Sockets;
 using System.IO;
 using System.Threading;
 using System.Collections.Specialized;
+using Ionic.Zip;
 
 
 namespace MalnatiProject
 {
     class FtpClient
     {
-
         private NetworkStream ns;
         private StreamWriter streamWriter;
         private StreamReader streamReader;
@@ -37,41 +37,44 @@ namespace MalnatiProject
         //private StreamReader dataSr;
         private Int16 port = 0;
         string hostname;
+        private bool connesso;
+        bool isDir = false;
+
         public MainWindow rif;
 
-        public FtpClient(Int16 port) {
-            this.port = port++;
-            hostname = Dns.GetHostName();
-            IPHostEntry ipEntry = Dns.GetHostEntry(hostname);
-            IPAddress[] addresses = ipEntry.AddressList;
-
-            Console.WriteLine("Computer Host Name = " + hostname);
-
-            for (int i = 0; i < addresses.Length; i++)
-            {
-                Console.WriteLine("IP Address n.{0} = {1} ", i, addresses[i].ToString());
-                if (addresses[i].ToString().Length <= 16)
-                {
-                    ipLocalAddress = addresses[i];
-                }
-            }
-        
-        
+        public bool Connesso
+        {
+            get { return connesso; }
+            set { connesso = value; }
         }
 
-
-        public void Connetti(IPAddress ipRemoteAddress)
+        public FtpClient(Int16 port, IPAddress localAddress)
         {
-            //string stringa = this.IP_box.Text;
-            //string[] address = stringa.Split('.');
+            this.port = ++port;
+            //hostname = Dns.GetHostName();
+            //IPHostEntry ipEntry = Dns.GetHostEntry(hostname);
+            //IPAddress[] addresses = ipEntry.AddressList;
 
-            //byte[] bAddr = new byte[4];
-            //bAddr[0] = Convert.ToByte(address[0]);
-            //bAddr[1] = Convert.ToByte(address[1]);
-            //bAddr[2] = Convert.ToByte(address[2]);
-            //bAddr[3] = Convert.ToByte(address[3]);
+            //Console.WriteLine("Computer Host Name = " + hostname);
 
-            //ipAddress = new IPAddress(bAddr);
+            //for (int i = 0; i < addresses.Length; i++)
+            //{
+            //    Console.WriteLine("IP Address n.{0} = {1} ", i, addresses[i].ToString());
+            //    if (addresses[i].ToString().Length <= 16)
+            //    {
+            //        ipLocalAddress = addresses[i];
+            //    }
+            //}
+            ipLocalAddress = localAddress;
+        }
+
+        public void setRif(MainWindow main)
+        {
+            rif = main;
+        }
+
+        public bool Connetti(IPAddress ipRemoteAddress)
+        {
             try
             {
                 ipEndPoint = new IPEndPoint(ipRemoteAddress, 21);
@@ -89,27 +92,50 @@ namespace MalnatiProject
                 {
                     answer = streamReader.ReadLine();
                     Console.WriteLine("This is the server answer: " + answer + "\n");
+                    porta();
+                    return true;
                 }
                 else
-                   Console.WriteLine("Non e' possibile comunicare con il server\n");
-
+                {
+                    Console.WriteLine("Non e' possibile comunicare con il server\n");
+                    Disconnetti();
+                    return false;
+                }
             }
-            catch(Exception e) {
+            catch (Exception e)
+            {
                 Console.WriteLine(e.Message);
+                Disconnetti();
+                return false;
+            }
+        }
+
+        public void Disconnetti()
+        {
+
+            if (tcpClient != null && tcpClient.Connected == true)
+            {
+                if (streamWriter != null && ns.CanWrite && ns.CanRead)
+                {
+                    quit();
+                    string answer;
+
+                }
+                tcpClient.Close();
             }
         }
 
         //private void Retrieve_button_Click(object sender, RoutedEventArgs e)
         //{
 
-            //IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
-            //foreach (IPAddress addr in localIPs)
-            //{
-            //    if (addr.AddressFamily == AddressFamily.InterNetwork)
-            //    {
-            //        Console.WriteLine(addr);
-            //    }
-            //}
+        //IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
+        //foreach (IPAddress addr in localIPs)
+        //{
+        //    if (addr.AddressFamily == AddressFamily.InterNetwork)
+        //    {
+        //        Console.WriteLine(addr);
+        //    }
+        //}
 
 
         //    if (ns.CanWrite)
@@ -153,86 +179,136 @@ namespace MalnatiProject
         public void Retrieve()
         {
             char[] string_line = new char[4096];
+            byte[] buffer = new byte[4096];
             int total = 0;
             int count = 0;
-            TcpListener dataListener = new TcpListener(ipLocalAddress, port);
-            dataListener.Start();
-            //MessageBox.Show("In ascolto sulla porta " + port + "\ndall'IP " + ip.ToString());
-            //str.WriteLine("retr ciao");
-            streamWriter.WriteLine("retr");
-            streamWriter.Flush();
-
-            //Console.WriteLine("attendo file");
-
-            TcpClient dataConnection = dataListener.AcceptTcpClient();
-            //dataListener.Stop();
-            //string answer = strreader.ReadLine();
-            //MessageBox.Show(answer);
-            Console.WriteLine("Connessione dati stabilita! " + dataConnection.Client.LocalEndPoint.ToString());
-            NetworkStream dataNetworkStream = dataConnection.GetStream();
-            StreamReader dataStreamR = new StreamReader(dataNetworkStream);
-            StreamWriter dataStreamW = new StreamWriter(dataNetworkStream);
-
-            //dataStreamW.WriteLine("Connesso!");
-            //dataStreamW.Flush();
-            //string answer2 = dataStreamR.ReadLine();
-            //MessageBox.Show(answer2);
-            //FileStream file = new FileStream("prova.txt", FileMode.Open, FileAccess.Write);
-
-            //if (File.Exists("C:\\Users\\Riccardo\\Documents\\Visual Studio 2013\\Projects\\FTPClientClipboard\\FTPClientClipboard\\bin\\Debug\\prova.txt")) ;
-            //{
-            //    File.Delete("C:\\Users\\Riccardo\\Documents\\Visual Studio 2013\\Projects\\FTPClientClipboard\\FTPClientClipboard\\bin\\Debug\\prova.txt");
-            //}
-            if (File.Exists("C:\\fileTemporanei\\prova.txt"))
+            bool ricevuto = false;
+            isDir = false;
+            TcpListener dataListener = null;
+            TcpClient dataConnection = null;
+            FileStream file = null;
+            string filePath=null;
+            try
             {
-                File.Delete("C:\\fileTemporanei\\prova.txt");
+                dataListener = new TcpListener(IPAddress.Any, port);
+                dataListener.Start();
+
+                streamWriter.WriteLine("retr");
+                streamWriter.Flush();
+
+                dataConnection = dataListener.AcceptTcpClient();
+                dataListener.Stop();
+
+                Console.WriteLine("Connessione dati stabilita! " + dataConnection.Client.LocalEndPoint.ToString());
+                NetworkStream dataNetworkStream = dataConnection.GetStream();
+                StreamReader dataStreamR = new StreamReader(dataNetworkStream);
+                StreamWriter dataStreamW = new StreamWriter(dataNetworkStream);
+
+                //string answer = dataStreamR.ReadLine();
+                //string answer2 = dataStreamR.ReadLine();
+                string fileName = dataStreamR.ReadLine();
+               string[] fileNameArray = fileName.Split(';');
+               string[] fileNameArray1=null;
+                
+                if(fileNameArray.Length==2){
+                    isDir = true;
+                    fileName = fileNameArray[1];
+                    fileNameArray1= fileName.Split('.');
+
+                }
+                //string fileExtension = fileNameArray[1];
+
+                //if (!(fileExtension.Equals("txt")==true || fileExtension.Equals("bmp")==true))
+                //    return;
+
+                if (dataNetworkStream.CanWrite)
+                {
+                    dataStreamW.WriteLine("go");
+                    dataStreamW.Flush();
+                }
+
+                filePath = "C:\\temp\\" + fileName;
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                 file = File.Create(filePath);
+
+                //if(fileExtension.Equals("txt")==true)
+                //{
+
+                using (BinaryReader bReader = new BinaryReader(dataNetworkStream))
+                {
+                    using (BinaryWriter bWriter = new BinaryWriter(file))
+                    {
+                        while ((count = bReader.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            bWriter.Write(buffer, 0, count);
+                            total += count;
+                        }
+                    }
+                }
+                file.Close();
+                dataStreamR.Close();
+                Console.WriteLine("File ricevuto!");
+                ricevuto = true;
+                
+                //}
+
+                dataConnection.Close();
+                StringCollection s = new StringCollection();
+                if (isDir) {
+                    using (ZipFile zip = ZipFile.Read(filePath))
+                    {
+                        Directory.CreateDirectory("C:\\temp\\" +fileNameArray1[0]);   
+                        foreach (ZipEntry e in zip)
+                        {
+                            e.Extract("C:\\temp\\"+fileNameArray1[0]);
+
+                        }
+                    }
+                    filePath = "C:\\temp\\"+fileNameArray1[0];
+                }
+                s.Add(filePath);
+                rif.SetClip(s);
             }
-            FileStream file = File.Create("C:\\fileTemporanei\\prova.txt");
-            StreamWriter fileStream = new StreamWriter(file);
-
-
-            while ((count = dataStreamR.Read(string_line, 0, string_line.Length)) > 0)
+            catch (Exception)
             {
-
-                fileStream.Write(string_line, 0, count);
-                total += count;
-                //Console.WriteLine(string_line);
+                file.Close();
+                if (ricevuto == false)
+                    
+                    File.Delete(filePath);
+                    
+                if (dataListener != null)
+                    dataListener.Stop();
+                if (dataConnection != null)
+                    if (dataConnection.Connected)
+                        dataConnection.Close();
+                //Disconnetti(); //meglio di no, un problema sulla connessione dati non deve implicare un problema sul canale di ctrl
             }
-            fileStream.Close();
-            dataStreamR.Close();
-            Console.WriteLine("File ricevuto!");
-            /************************/
-            //clipboard
-            //Clipboard.SetData(DataFormats.Text, (Object)milan);
-            
-            StringCollection s = new StringCollection();
-                s.Add("C:\\fileTemporanei\\prova.txt");
-            
-            rif.SetClip(s);
-            
-
-            /************************/
         }
 
-
-        public void porta() {
-
-                //string stringa = ip;
-                //string[] address = stringa.Split('.');
-
-                //byte[] bAddr = new byte[4];
-                //bAddr[0] = Convert.ToByte(address[0]);
-                //bAddr[1] = Convert.ToByte(address[1]);
-                //bAddr[2] = Convert.ToByte(address[2]);
-                //bAddr[3] = Convert.ToByte(address[3]);
-                //ipAddressClient = new IPAddress(bAddr);
-
-               // port = Convert.ToInt16(stringhe[1]);
+        public void porta()
+        {
+            try
+            {
                 streamWriter.WriteLine("porta " + port);
                 streamWriter.Flush();
                 string answer = streamReader.ReadLine();
                 Console.WriteLine("Il server ha risposto: " + answer);
                 Console.WriteLine("Connessione dati sulla porta " + port);
+            }
+            catch (Exception)
+            {
+                Disconnetti();
+            }
+
+        }
+
+        public void quit()
+        {
+            streamWriter.WriteLine("quit");
+            streamWriter.Flush();
         }
     }
 }
