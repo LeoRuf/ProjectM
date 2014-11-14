@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -29,42 +30,42 @@ namespace MalnatiProject
         public String password;
         public Socket socket;
         byte[] rec = new byte[64];
+
         public MainWindow rif;
-       public static ManualResetEvent allDone = new ManualResetEvent(false);
+        public static ManualResetEvent allDone = new ManualResetEvent(false);
+        
 
         bool connesso = false;
         public bool boss = false;
 
+        FtpClient ftpClient;
+
+        /*****************************/
+        //proprieta'
         public String Address
         {
             get { return "       " + ip + "                         " + Convert.ToString(porta); }
             set { }
         }
 
-        FtpClient ftpClient;
-
-        //public bool isConnesso()
-        //{
-        //    if (connesso == true)
-        //        return true;
-
-        //    return false;
-        //}
         public bool Connesso
         {
             get { return connesso; }
             set { connesso = value; }
         }
+        /****************************/
 
         public ServerWindow(String ip, Int16 porta, String password)
         {
-            
             InitializeComponent();
             this.ip = ip;
             this.porta = porta;
             this.password = password;
             ftpClient = new FtpClient(porta, IPAddress.Parse(ip));
+             
 
+            //per la cirlce progress bar
+             Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline),new FrameworkPropertyMetadata { DefaultValue = 5 } );
         }
 
         public String ToString()
@@ -77,7 +78,6 @@ namespace MalnatiProject
         {
             try
             {
-
                 //connession client tastiera + mouse
                 IPEndPoint lep = new IPEndPoint(IPAddress.Parse(ip), Convert.ToInt16(porta));
                 Console.WriteLine("Sto per fare la connect");
@@ -182,27 +182,12 @@ namespace MalnatiProject
         {
             connesso = false;
             ftpClient.Disconnetti();
-            if (socket != null && socket.Connected == true)
-
+            if (socket != null)
+                //if(socket.Connected == true)
+                //    socket.Close();
                 socket.Close();
-            rif.DisconnettiButton.Visibility = Visibility.Collapsed;
-            rif.loading_label.Content = "";
+            rif.restoreVisibility();
         }
-
-        //public static void ConnectCallback1(IAsyncResult ar)
-        //{
-        //    Console.WriteLine("4.5");
-
-        //    Console.WriteLine("5");
-        //    Socket s = (Socket)ar.AsyncState;
-        //    Console.WriteLine("6");
-
-        //    s.EndConnect(ar);
-        //    Console.WriteLine("7");
-        //    allDone.Set();
-
-
-        //}
 
         private void Grid_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -231,7 +216,7 @@ namespace MalnatiProject
             double y = e.GetPosition(this).Y / System.Windows.SystemParameters.PrimaryScreenHeight;
 
             byte[] string_send = Encoding.UTF8.GetBytes(x + ";" + y + "?");
-            Console.WriteLine("You moved me at " + e.GetPosition(this).ToString());
+            //Console.WriteLine("You moved me at " + e.GetPosition(this).ToString());
             try
             {
                 //socket.Send(string_send);
@@ -250,6 +235,7 @@ namespace MalnatiProject
         }
 
         public static void BeginSendCallback(IAsyncResult ar) { }
+
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             byte[] string_send = Encoding.UTF8.GetBytes("D");
@@ -293,6 +279,12 @@ namespace MalnatiProject
         private void Grid_KeyDown(object sender, KeyEventArgs e)
         {
             socket.NoDelay = true;
+
+            bool isD = false;
+            bool isS = false;
+            bool isL = false;
+            bool isK = false;
+
             if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
             {
 
@@ -302,6 +294,7 @@ namespace MalnatiProject
                         Console.WriteLine("D");
                         this.Hide();
                         rif.Show(); //Serve?
+                        isD = true;
                         break;
                     case Key.S:
                         Console.WriteLine("S");
@@ -318,31 +311,48 @@ namespace MalnatiProject
 
                         rif.Show();
                         this.Hide();
+                        isS = true;
                         break;
                     case Key.L:
                         Console.WriteLine("L");
                         Thread retrieveThread = new Thread(ftpClient.Retrieve);
                         retrieveThread.Start();
-
+                        isL = true;
                         break;
 
-                    default:
-                        Console.WriteLine("Default case");
+                    case Key.K:
+                        Thread copyThread = new Thread(ftpClient.copyToServer);
+                        copyThread.Start();
+                        isK = true;
                         break;
+                    //default:
+                      //  Console.WriteLine("Default case");
+                        //break;
 
                 }
             }
-            else
-            {
+            
                 try
                 {
-
-                    Console.WriteLine(e.Key.ToString() + "\n");
-                    int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
-                    Console.WriteLine(valore.ToString());
-                    byte[] string_send = Encoding.UTF8.GetBytes("-X" + valore.ToString() + "-");
-                    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-
+                    if (isD == false && isS == false && isL == false && isK == false)
+                    {
+                        if (e.Key.ToString() == "System")
+                        {
+                            Console.WriteLine("Down: " + e.SystemKey.ToString());
+                            int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.SystemKey).ToString());
+                            Console.WriteLine("Down: " + valore.ToString() + "\n");
+                            byte[] string_send = Encoding.UTF8.GetBytes("-X" + valore.ToString() + "-");
+                            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Down: " + e.Key.ToString());
+                            int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
+                            Console.WriteLine("Down: " + valore.ToString() + "\n");
+                            byte[] string_send = Encoding.UTF8.GetBytes("-X" + valore.ToString() + "-");
+                            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                        }
+                    }
 
 
                 }
@@ -354,7 +364,7 @@ namespace MalnatiProject
                     rif.master.Children.Clear();
 
                 }
-            }
+            
 
         }
 
@@ -363,12 +373,22 @@ namespace MalnatiProject
             socket.NoDelay = true;
             try
             {
-
-                Console.WriteLine(e.Key.ToString() + "\n");
-                int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
-                Console.WriteLine(valore.ToString());
-                byte[] string_send = Encoding.UTF8.GetBytes("-Y" + valore.ToString() + "-");
-                socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                if (e.Key.ToString() == "System")
+                {
+                    Console.WriteLine("Down: " + e.SystemKey.ToString());
+                    int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.SystemKey).ToString());
+                    Console.WriteLine("Down: " + valore.ToString() + "\n");
+                    byte[] string_send = Encoding.UTF8.GetBytes("-X" + valore.ToString() + "-");
+                    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                }
+                else
+                {
+                    Console.WriteLine("Up: " + e.Key.ToString());
+                    int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
+                    Console.WriteLine("Up: " + valore.ToString() + "\n");
+                    byte[] string_send = Encoding.UTF8.GetBytes("-Y" + valore.ToString() + "-");
+                    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                }
             }
             catch (SocketException)
             {
@@ -379,6 +399,7 @@ namespace MalnatiProject
 
             }
 
+        
 
         }
 
@@ -387,5 +408,42 @@ namespace MalnatiProject
             grid.Focus();
         }
 
-     }
+
+            public void fineTraferimento(){
+                this.e1.Fill = Brushes.Black;
+                this.e2.Fill = Brushes.Black;
+                this.e3.Fill = Brushes.Black;
+                this.e4.Fill = Brushes.Black;
+                this.e5.Fill = Brushes.Black;
+                this.e6.Fill = Brushes.Black;
+                this.e7.Fill = Brushes.Black;
+                this.e8.Fill = Brushes.Black;
+                this.e9.Fill = Brushes.Black;
+                this.e10.Fill = Brushes.Black;
+                return;
+            }
+
+            public void inCorso() {
+                
+                
+                rif.Inizio(this);
+                
+                return;
+           }
+
+            public void fineTrasferimento()
+            {
+
+
+                rif.Fine(this);
+
+                return;
+            }
+
+     
+
+
+      
+
+    }
 }

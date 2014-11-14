@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -36,6 +37,7 @@ namespace MalnatiProject
         private Dispatcher dispatcher;
         bool cancella_premuto = false;
         bool isFTPConnesso = false;
+        
 
 
         public MainWindow()
@@ -44,7 +46,7 @@ namespace MalnatiProject
             dispatcher = Dispatcher.CurrentDispatcher;
             serverList.Add(new ServerWindow("192.168.1.135", 1601, "c"));
             lServers.ItemsSource = serverList;
-        }
+      }
 
         private void aggiungi_button_Click(object sender, RoutedEventArgs e)
         {
@@ -53,26 +55,97 @@ namespace MalnatiProject
             add.rif = this;
         }
 
-       
-
-        //public void DoRetrieve()
-        //{
-        //    Thread workerThread2 = new Thread(ftpClient.Retrieve);
-        //    workerThread2.Start();
-        //}
-
-
-   public void SetClip(StringCollection s)
+        /*****************************/
+        //metodi del dispatcher
+        public void SetClip(StringCollection s)
         {
             Action action = () =>
             {
-                Console.WriteLine("Sto settando clipboard");
+                //Console.WriteLine("Sto settando clipboard");
                 Clipboard.SetFileDropList(s);
                 MessageBox.Show("Clipboard copiata!");
+                
             };
 
             dispatcher.BeginInvoke(action);
         }
+
+        public void SetClipText(string text)
+        {
+            Action action = () =>
+            {
+                Clipboard.SetText(text);
+                MessageBox.Show("Clipboard copiata!");
+            };
+
+            dispatcher.Invoke(action);
+        }
+
+
+        public void Inizio(ServerWindow s) {
+
+            Action action = () =>
+            {
+                s.label_receiving.Content = "Receiving ...";
+                s.e1.Fill = Brushes.Orange;
+                s.e1.Opacity = 1.0;
+
+                s.e2.Fill = Brushes.Black;
+                s.e2.Opacity = 0.9;
+
+                s.e3.Fill = Brushes.Black;
+                s.e3.Opacity = 0.8;
+
+                s.e4.Fill = Brushes.Black;
+                s.e4.Opacity = 0.7;
+
+                s.e5.Fill = Brushes.Black;
+                s.e5.Opacity = 0.6;
+
+                s.e6.Fill = Brushes.Black;
+                s.e6.Opacity = 0.5;
+                
+                s.e7.Fill = Brushes.Black;
+                s.e7.Opacity = 0.4;
+
+                s.e8.Fill = Brushes.Black;
+                s.e8.Opacity = 0.3;
+
+                s.e9.Fill = Brushes.Black;
+                s.e9.Opacity = 0.2;
+
+                s.e10.Fill = Brushes.Black;
+                s.e10.Opacity = 0.1;
+           };
+
+
+            dispatcher.Invoke(action);
+        }
+
+
+        public void Fine(ServerWindow s)
+        {
+
+            Action action = () =>
+            {
+                s.e1.Fill = Brushes.LightBlue;
+                s.e2.Fill = Brushes.LightBlue;
+                s.e3.Fill = Brushes.LightBlue;
+                s.e4.Fill = Brushes.LightBlue;
+                s.e5.Fill = Brushes.LightBlue;
+                s.e6.Fill = Brushes.LightBlue;
+                s.e7.Fill = Brushes.LightBlue;
+                s.e8.Fill = Brushes.LightBlue;
+                s.e9.Fill = Brushes.LightBlue;
+                s.e10.Fill = Brushes.LightBlue;
+                s.label_receiving.Content = "";
+
+            };
+
+
+            dispatcher.Invoke(action);
+        }
+
 
         public void Change_Focus(ServerWindow window)
         {
@@ -141,6 +214,7 @@ namespace MalnatiProject
 
             dispatcher.BeginInvoke(action);
         }
+        /****************************************/
 
         private void CancellaButton_Click(object sender, RoutedEventArgs e)
         {
@@ -231,5 +305,14 @@ namespace MalnatiProject
             }
         }
 
+        public void restoreVisibility()
+        {
+            Action action = new Action(() =>
+            {
+                DisconnettiButton.Visibility = Visibility.Collapsed;
+                loading_label.Content = "";
+            });
+            dispatcher.Invoke(action);
+        }
     }
 }
