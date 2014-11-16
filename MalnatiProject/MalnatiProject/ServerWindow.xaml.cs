@@ -58,15 +58,13 @@ namespace MalnatiProject
         public ServerWindow(String ip, Int16 porta, String password)
         {
             InitializeComponent();
+            
             this.ip = ip;
             this.porta = porta;
             this.password = password;
             ftpClient = new FtpClient(porta, IPAddress.Parse(ip));
              
-
-            //per la cirlce progress bar
-             Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline),new FrameworkPropertyMetadata { DefaultValue = 5 } );
-        }
+ }
 
         public String ToString()
         {
@@ -93,8 +91,10 @@ namespace MalnatiProject
                 socket.ReceiveTimeout = 50000;
                 socket.Receive(rec);
                 string pwdAns = Encoding.UTF8.GetString(rec);
-                if (true) { }
-                // if (Encoding.UTF8.GetString(rec).Trim('\0').Equals(password)) { }
+               // if (true) { }
+                if (Encoding.UTF8.GetString(rec).Trim('\0').Equals(password)) {
+                   Console.WriteLine("Password corretta");
+                 }
                 else
                 {
                     MessageBox.Show("Password errata");
@@ -112,6 +112,11 @@ namespace MalnatiProject
                     {
                         Console.WriteLine("Connected to {0}:{1}", remoteEndPoint.Address, remoteEndPoint.Port);
                         socket.Send(Encoding.UTF8.GetBytes("ready"));
+
+
+                        //per la cirlce progress bar
+                        Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 5 });
+       
                         connesso = true;
                         ftpClient.setRif(rif,this);
                         rif.Change_Focus(this);
@@ -174,6 +179,7 @@ namespace MalnatiProject
             }
             else
             {
+                rif.Fine(this);
                 Connetti();
             }
         }
@@ -261,6 +267,32 @@ namespace MalnatiProject
             byte[] string_send = Encoding.UTF8.GetBytes("R");
             Console.WriteLine("You clicked me at " + e.GetPosition(this).ToString());
             //s.Send(string_send);
+            try
+            {
+                socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            }
+            catch (SocketException)
+            {
+                MessageBox.Show("Connessione caduta");
+                this.Hide();
+                this.Disconnetti();
+                rif.master.Children.Clear();
+
+            }
+
+        }
+
+        private void grid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            byte[] string_send;
+            if (e.Delta > 0)
+            {
+                 string_send = Encoding.UTF8.GetBytes("W");
+            }
+            else {
+                 string_send = Encoding.UTF8.GetBytes("P");
+            }
+            Console.WriteLine("Scroll\n ");
             try
             {
                 socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
@@ -396,11 +428,7 @@ namespace MalnatiProject
                 this.Hide();
                 this.Disconnetti();
                 rif.master.Children.Clear();
-
             }
-
-        
-
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
@@ -409,41 +437,14 @@ namespace MalnatiProject
         }
 
 
-            public void fineTraferimento(){
-                this.e1.Fill = Brushes.Black;
-                this.e2.Fill = Brushes.Black;
-                this.e3.Fill = Brushes.Black;
-                this.e4.Fill = Brushes.Black;
-                this.e5.Fill = Brushes.Black;
-                this.e6.Fill = Brushes.Black;
-                this.e7.Fill = Brushes.Black;
-                this.e8.Fill = Brushes.Black;
-                this.e9.Fill = Brushes.Black;
-                this.e10.Fill = Brushes.Black;
-                return;
-            }
-
-            public void inCorso() {
-                
-                
-                rif.Inizio(this);
-                
+            public void inCorso(bool set) {
+                rif.Inizio(this, set);
                 return;
            }
 
-            public void fineTrasferimento()
-            {
-
-
+            public void fineTrasferimento(){
                 rif.Fine(this);
-
                 return;
             }
-
-     
-
-
-      
-
-    }
+     }
 }

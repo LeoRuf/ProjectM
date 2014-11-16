@@ -44,7 +44,7 @@ namespace MalnatiProject
         {
             InitializeComponent();
             dispatcher = Dispatcher.CurrentDispatcher;
-            serverList.Add(new ServerWindow("192.168.1.135", 1601, "c"));
+            serverList.Add(new ServerWindow("192.168.1.136", 1601, "ciao"));
             lServers.ItemsSource = serverList;
       }
 
@@ -82,11 +82,16 @@ namespace MalnatiProject
         }
 
 
-        public void Inizio(ServerWindow s) {
+        public void Inizio(ServerWindow s, bool set) {
 
             Action action = () =>
             {
-                s.label_receiving.Content = "Receiving ...";
+                if(set==true){
+                    s.label_receiving.Content = "Sending ...";
+                }
+                else{
+                    s.label_receiving.Content = "Receiving ...";
+                }
                 s.e1.Fill = Brushes.Orange;
                 s.e1.Opacity = 1.0;
 
@@ -257,6 +262,7 @@ namespace MalnatiProject
                 DisconnettiButton.IsEnabled = false;
                 loading_label.Content = "Controllo in corso...";
                 (lServers.SelectedItem as ServerWindow).rif = this;
+                //Fine(lServers.SelectedItem as ServerWindow);
                 //eventuale connessione mouse+tastiera+client ftp
                 Thread workerThread1 = new Thread((lServers.SelectedItem as ServerWindow).Controlla);
                 workerThread1.Start();

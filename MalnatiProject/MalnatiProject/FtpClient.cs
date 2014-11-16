@@ -34,8 +34,9 @@ namespace MalnatiProject
         string hostname;
         private bool connesso;
         bool isDir = false;
+       static bool set = false;
 
-        public ServerWindow rif_ser;
+        public static ServerWindow rif_ser;
         public MainWindow rif;
 
         TcpClient _dataServer;
@@ -228,7 +229,8 @@ namespace MalnatiProject
                     {
                         using (BinaryWriter bWriter = new BinaryWriter(file))
                         {
-                            rif_ser.inCorso();
+                            set = false;
+                            rif_ser.inCorso(set);
                             while ((count = bReader.Read(buffer, 0, buffer.Length)) > 0)
                             {
                                 bWriter.Write(buffer, 0, count);
@@ -497,6 +499,8 @@ namespace MalnatiProject
                     //ed lo stream di output (network stream) ad un binary writer
                     using (BinaryWriter bWriter = new BinaryWriter(output))
                     {
+                        set = true;
+                        rif_ser.inCorso(set);
                         while ((count = bReader.Read(buffer, 0, buffer.Length)) > 0)
                         {
                             bWriter.Write(buffer, 0, count);
@@ -504,6 +508,8 @@ namespace MalnatiProject
                         }
                     }
                 }
+                
+                rif_ser.fineTrasferimento();
             }
             catch (Exception)
             {
