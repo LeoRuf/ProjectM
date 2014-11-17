@@ -34,7 +34,8 @@ namespace MalnatiProject
         string hostname;
         private bool connesso;
         bool isDir = false;
-       static bool set = false;
+        static bool set = false;
+        TcpClient dataConnection;
 
         public static ServerWindow rif_ser;
         public MainWindow rif;
@@ -44,6 +45,7 @@ namespace MalnatiProject
         string _transferType;
         private string fileName;
         private string fileExtension;
+
 
         public bool Connesso
         {
@@ -123,7 +125,7 @@ namespace MalnatiProject
                 {
                     if (streamWriter != null && ns.CanWrite && ns.CanRead)
                     {
-                        quit();
+                        //quit();
                         string answer;
                     }
                     //tcpClient.Close();
@@ -142,16 +144,36 @@ namespace MalnatiProject
             byte[] buffer = new byte[4096];
             int total = 0;
             int count = 0;
+            FileStream file=null;
+            TcpListener dataListener = null;
+            string filePath = null;
             bool ricevuto = false;
             bool isText;
             isDir = false;
-            TcpListener dataListener = null;
-            TcpClient dataConnection = null;
-            FileStream file = null;
-            string filePath = null;
+            bool yes = false;
             try
             {
-                dataListener = new TcpListener(IPAddress.Any, port);
+                
+                if (dataConnection != null)
+                {
+                    if (dataConnection.Connected)
+                    {
+                        bool answer = rif.ShowOptions();
+                        if (answer == true)
+                        {
+                            yes = true;
+                            rif_ser.fineTrasferimento();
+                            throw new Exception();
+
+                        }
+                        return;
+                    }
+                }
+
+            dataConnection = null;
+             
+            
+               dataListener = new TcpListener(IPAddress.Any, port);
                 dataListener.Start();
 
                 streamWriter.WriteLine("retr");
@@ -167,7 +189,10 @@ namespace MalnatiProject
 
                 string fileName = dataStreamR.ReadLine(); //legge il messaggio mandato dal server
                 string text = null;
-
+                if (fileName.Equals("empty")) {
+                    rif.EmptyClipboard();    
+                    throw new Exception();
+                }
                 string[] sizeArray = fileName.Split('!');
                 long size = Convert.ToInt64(sizeArray[0]);
                 fileName = sizeArray[1];
@@ -249,6 +274,9 @@ namespace MalnatiProject
                     {
                         using (ZipFile zip = ZipFile.Read(filePath))
                         {
+                            if (Directory.Exists("C:\\temp\\" + fileNameArray1[0])) {
+                                DeleteDirectory("C:\\temp\\" + fileNameArray1[0]);
+                            }
                             Directory.CreateDirectory("C:\\temp\\" + fileNameArray1[0]);
                             foreach (ZipEntry e in zip)
                             {
@@ -278,9 +306,14 @@ namespace MalnatiProject
             {
                 if (file != null)
                     file.Close();
-                if (ricevuto == false) //per il plain text non devo fare niente, al rientro dalla funzione la stringa corrotta e' eliminata senza essere copiata nella clipboard
+                if (ricevuto == false && yes==true)
+                { //per il plain text non devo fare niente, al rientro dalla funzione la stringa corrotta e' eliminata senza essere copiata nella clipboard
                     if (File.Exists(filePath))
+                    {
                         File.Delete(filePath);
+                        rif.DisplayErrorMessage();
+                    }
+                }
                 if (dataListener != null)
                     dataListener.Stop();
                 if (dataConnection != null)
@@ -288,6 +321,26 @@ namespace MalnatiProject
                         dataConnection.Close();
                 //Disconnetti(); //meglio di no, un problema sulla connessione dati non deve implicare un problema sul canale di ctrl
             }
+        }
+
+
+        public static void DeleteDirectory(string target_dir)
+        {
+            string[] files = Directory.GetFiles(target_dir);
+            string[] dirs = Directory.GetDirectories(target_dir);
+
+            foreach (string file in files)
+            {
+                File.SetAttributes(file, FileAttributes.Normal);
+                File.Delete(file);
+            }
+
+            foreach (string dir in dirs)
+            {
+                DeleteDirectory(dir);
+            }
+
+            Directory.Delete(target_dir, false);
         }
 
         public void porta()
@@ -322,6 +375,19 @@ namespace MalnatiProject
         //questo metodo tenta solo di connettersi al server per potergli in seguito trasferire la clipboard
         public void copyToServer()
         {
+            try
+            {
+
+            if (_dataServer != null) {
+                if (_dataServer.Connected) {
+                    bool answer1= rif.ShowOptions();
+                    if (answer1 == true) {
+                        rif_ser.fineTrasferimento();
+                        throw new Exception();
+                    }
+                    return;
+                }
+            }
             //mando comando al server
             streamWriter.WriteLine("copy");
             streamWriter.Flush();
@@ -333,8 +399,7 @@ namespace MalnatiProject
             _dataEndpoint.Port = port; //gli cambio pero' la porta=porta connessione "mouse+keyboard" + 1
 
             //instauro la connessione in modo attivo
-            try
-            {
+           
                 string pathname = "";
                 _dataServer = new TcpClient(); //creo la connessione 
                 _dataServer.BeginConnect(_dataEndpoint.Address, _dataEndpoint.Port, DoCopyToServer, pathname);
@@ -351,10 +416,11 @@ namespace MalnatiProject
         {
             try
             {
+                
                 _dataServer.EndConnect(result); //modalita' attiva
 
                 _transferType = "T"; //ipotizzo di trasferire un plain text, in caso negativo lo cambio
-
+                object emptyClip = null;
                 object plainText = null;
                 object stringObject = null; // Used to store the return value
                 var thread = new Thread(
@@ -373,8 +439,15 @@ namespace MalnatiProject
                       }
                       else
                       {
-                          plainText = true;
-                          stringObject = Clipboard.GetText();
+                          if (Clipboard.GetDataObject() == null)
+                          {
+                              emptyClip = true;
+                          }
+                          else
+                          {
+                              plainText = true;
+                              stringObject = Clipboard.GetText();
+                          }
                       }
                   });
                 thread.SetApartmentState(ApartmentState.STA);
@@ -385,6 +458,11 @@ namespace MalnatiProject
                 string path = null;
                 string message = null;
                 string textClipboard = null;
+                
+                if ((bool)emptyClip == true) {
+                    rif.EmptyClipboard();
+                    throw new Exception(); 
+                }
                 if ((bool)plainText)
                 {
                     //message = DoRetrievePlainText((string)stringObject);
@@ -441,7 +519,9 @@ namespace MalnatiProject
             }
             catch (Exception)
             {
-                Disconnetti();
+                if (_dataServer != null)
+                    if (_dataServer.Connected)
+                        _dataServer.Close();
             }
         }
 

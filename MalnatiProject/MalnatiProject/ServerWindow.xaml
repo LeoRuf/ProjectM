@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="serverWindow"  Height="600" Width="800" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid x:Name="grid" Background="LightBlue" MouseUp="Grid_MouseUp" MouseMove="Grid_MouseMove" MouseDown="Grid_MouseDown" MouseRightButtonUp="Grid_MouseRightButtonUp" KeyDown="Grid_KeyDown" KeyUp="Grid_KeyUp" Loaded="Grid_Loaded" Focusable="True" PreviewMouseWheel="grid_PreviewMouseWheel">
+       
         <Label Content="Lista shortcuts: " Height="26" Width="150" Margin="20,379,630,195"  FontSize="14" FontWeight="Bold" FontStyle="Italic"/>
         <Label  Height="26" Width="120" Content="Cambia focus: " Margin="10,468,650,106"  FontSize="14" FontWeight="Light"/>
         <Label  Height="28" Margin="231,466,449,106"  Content="          CTRL + S " BorderThickness="1" BorderBrush="Black"  Width="120" FontWeight="Bold" Background="#FF6BCB35" FontStyle="Italic"/>
@@ -114,10 +115,6 @@
 
         </Grid>
         <Label x:Name="label_receiving" Content="" HorizontalAlignment="Left" Margin="416,239,0,0" VerticalAlignment="Top" Width="248" Height="40" FontWeight="Bold" FontSize="20"/>
-
-
-
-
 
     </Grid>
 </Window>

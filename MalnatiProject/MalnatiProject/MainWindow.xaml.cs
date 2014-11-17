@@ -44,8 +44,9 @@ namespace MalnatiProject
         {
             InitializeComponent();
             dispatcher = Dispatcher.CurrentDispatcher;
-            serverList.Add(new ServerWindow("192.168.1.136", 1601, "ciao"));
+            serverList.Add(new ServerWindow("192.168.1.132", 1601, "c"));
             lServers.ItemsSource = serverList;
+            Clipboard.Clear();
       }
 
         private void aggiungi_button_Click(object sender, RoutedEventArgs e)
@@ -151,7 +152,37 @@ namespace MalnatiProject
             dispatcher.Invoke(action);
         }
 
+        public void DisplayErrorMessage() {
 
+            Action action = () => { MessageBox.Show("Errore copia clipboard"); };
+            dispatcher.Invoke(action);
+        }
+
+        public void EmptyClipboard()
+        {
+
+            Action action = () => { MessageBox.Show("Clipboard vuota!"); };
+            dispatcher.Invoke(action);
+        }
+
+        public bool ShowOptions()
+        {
+            object var=true;
+            Action action = () => {
+               MessageBoxResult res = MessageBox.Show("Vuoi interrompere trasferimento?", "Copia clipboard in corso!", MessageBoxButton.YesNo);
+               if (res == MessageBoxResult.Yes)
+               {
+                   var = true;
+               }
+               else
+               {
+                   var = false;
+               }
+            };
+
+            dispatcher.Invoke(action);
+            return (bool)var;
+        }
         public void Change_Focus(ServerWindow window)
         {
             Action action = () =>
