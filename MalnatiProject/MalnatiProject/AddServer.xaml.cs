@@ -36,51 +36,38 @@ namespace MalnatiProject
             int flag = 0;
 
             string myIpString = this.ip_text_box.Text;
-            IPAddress ipAddress = null;
-            bool isValidPorta=true;
-            bool isValidPassword = true;
             bool isValidIp = true;
 
+            string pattern = @"^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$";
+            Regex check = new Regex(pattern);
+            if (myIpString == null)
+            {
+                isValidIp = false;
+            }
+            else
+            {
+                isValidIp = check.IsMatch(myIpString, 0);
+            }
 
+            //isValidIp = IPAddress.TryParse(myIpString, out ipAddress);
 
             Int16 num;
-            if (this.porta_text_box.Text.Trim().Length == 0 || !Int16.TryParse(this.porta_text_box.Text.Trim(), out num))
+            if (isValidIp == false)
+            {
+                MessageBox.Show("IP non valido o mancante");
+            } else if (this.porta_text_box.Text.Trim().Length == 0 || !Int16.TryParse(this.porta_text_box.Text.Trim(), out num))
             {
 
                 MessageBox.Show("Porta non valida o mancante");
-                isValidPorta = false;
+                
 
-
-            }
-
-            if (this.password_text_box.Password.Trim().Length == 0)
+            } else if (this.password_text_box.Password.Trim().Length == 0)
             {
 
                 MessageBox.Show("Password mancante");
-                isValidPassword = false;
 
 
-            }
-             string pattern = @"^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$";
-             Regex check = new Regex(pattern);
-             if (myIpString == null)
-             {
-                 isValidIp = false;
-             }
-             else
-             {
-                 isValidIp = check.IsMatch(myIpString, 0);
-             }
-
-            //isValidIp = IPAddress.TryParse(myIpString, out ipAddress);
-            
-            if (isValidIp == false)
-                {
-                    MessageBox.Show("IP non valido o mancante");
-                }
-            
-            if (isValidIp == true && isValidPassword==true && isValidPorta==true)
-            {
+            } else {
                 ServerWindow server = new ServerWindow(this.ip_text_box.Text, Convert.ToInt16(this.porta_text_box.Text), this.password_text_box.Password);
             
                 foreach (ServerWindow se in rif.serverList)

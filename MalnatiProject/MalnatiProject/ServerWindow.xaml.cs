@@ -115,7 +115,7 @@ namespace MalnatiProject
 
 
                         //per la cirlce progress bar
-                        Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 5 });
+                        //Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 5 });
        
                         connesso = true;
                         ftpClient.setRif(rif,this);
@@ -284,28 +284,10 @@ namespace MalnatiProject
 
         private void grid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            byte[] string_send;
-            if (e.Delta > 0)
-            {
-                 string_send = Encoding.UTF8.GetBytes("W");
-            }
-            else {
-                 string_send = Encoding.UTF8.GetBytes("P");
-            }
-            Console.WriteLine("Scroll\n ");
-            try
-            {
-                socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-            }
-            catch (SocketException)
-            {
-                MessageBox.Show("Connessione caduta");
-                this.Hide();
-                this.Disconnetti();
-                rif.master.Children.Clear();
-
-            }
-
+            byte[] string_send = Encoding.UTF8.GetBytes("_X" + e.Delta + "_");
+            Console.WriteLine(e.Delta.ToString());
+            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            return;
         }
 
         private void Grid_KeyDown(object sender, KeyEventArgs e)
@@ -324,12 +306,25 @@ namespace MalnatiProject
                 {
                     case Key.D:
                         Console.WriteLine("D");
+                        if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
+                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
+                        else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
+
+                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.D));
+
                         this.Hide();
                         rif.Show(); //Serve?
                         isD = true;
                         break;
                     case Key.S:
                         Console.WriteLine("S");
+                        if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
+                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
+                        else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
+                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.S));
+
                         foreach (ServerWindow ser in rif.serverList)
                         {
                             if (rif.serverList.IndexOf(this) < rif.serverList.IndexOf(ser) && ser.socket != null && ser.Connesso == true)
@@ -350,12 +345,21 @@ namespace MalnatiProject
                         Thread retrieveThread = new Thread(ftpClient.Retrieve);
                         retrieveThread.Start();
                         isL = true;
-                        break;
+                        if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
+                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
+                        else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
+                            break;
 
                     case Key.K:
                         Thread copyThread = new Thread(ftpClient.copyToServer);
                         copyThread.Start();
                         isK = true;
+                        if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
+                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
+                        else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
+                            
                         break;
                     //default:
                       //  Console.WriteLine("Default case");
@@ -363,6 +367,25 @@ namespace MalnatiProject
 
                 }
             }
+
+
+            //if (e.KeyboardDevice.IsKeyDown(Key.LeftAlt) && e.KeyboardDevice.IsKeyDown(Key.F))
+            //{
+
+            //    switch (e.Key)
+            //    {
+
+            //        case Key.F4:
+            //            Console.WriteLine("Ho premuto alt+F4");
+            //            if (e.KeyboardDevice.IsKeyDown(Key.LeftAlt))
+            //                this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftAlt));
+            //            rif.Close();
+
+            //            break;
+            //    }
+
+
+            //}
             
                 try
                 {
@@ -373,7 +396,7 @@ namespace MalnatiProject
                             Console.WriteLine("Down: " + e.SystemKey.ToString());
                             int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.SystemKey).ToString());
                             Console.WriteLine("Down: " + valore.ToString() + "\n");
-                            byte[] string_send = Encoding.UTF8.GetBytes("-X" + valore.ToString() + "-");
+                            byte[] string_send = Encoding.UTF8.GetBytes("_X" + valore.ToString() + "_");
                             socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
                         }
                         else
@@ -381,7 +404,7 @@ namespace MalnatiProject
                             Console.WriteLine("Down: " + e.Key.ToString());
                             int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
                             Console.WriteLine("Down: " + valore.ToString() + "\n");
-                            byte[] string_send = Encoding.UTF8.GetBytes("-X" + valore.ToString() + "-");
+                            byte[] string_send = Encoding.UTF8.GetBytes("_X" + valore.ToString() + "_");
                             socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
                         }
                     }
@@ -407,19 +430,21 @@ namespace MalnatiProject
             {
                 if (e.Key.ToString() == "System")
                 {
-                    Console.WriteLine("Down: " + e.SystemKey.ToString());
+                    Console.WriteLine("Up: " + e.SystemKey.ToString());
                     int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.SystemKey).ToString());
-                    Console.WriteLine("Down: " + valore.ToString() + "\n");
-                    byte[] string_send = Encoding.UTF8.GetBytes("-X" + valore.ToString() + "-");
+                    Console.WriteLine("Up: " + valore.ToString() + "\n");
+                    byte[] string_send = Encoding.UTF8.GetBytes("_Y" + valore.ToString() + "_");
                     socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    
                 }
                 else
                 {
                     Console.WriteLine("Up: " + e.Key.ToString());
                     int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
                     Console.WriteLine("Up: " + valore.ToString() + "\n");
-                    byte[] string_send = Encoding.UTF8.GetBytes("-Y" + valore.ToString() + "-");
+                    byte[] string_send = Encoding.UTF8.GetBytes("_Y" + valore.ToString() + "_");
                     socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                   
                 }
             }
             catch (SocketException)

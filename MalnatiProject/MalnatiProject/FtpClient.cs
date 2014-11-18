@@ -126,7 +126,6 @@ namespace MalnatiProject
                     if (streamWriter != null && ns.CanWrite && ns.CanRead)
                     {
                         //quit();
-                        string answer;
                     }
                     //tcpClient.Close();
                 }
@@ -189,10 +188,7 @@ namespace MalnatiProject
 
                 string fileName = dataStreamR.ReadLine(); //legge il messaggio mandato dal server
                 string text = null;
-                if (fileName.Equals("empty")) {
-                    rif.EmptyClipboard();    
-                    throw new Exception();
-                }
+              
                 string[] sizeArray = fileName.Split('!');
                 long size = Convert.ToInt64(sizeArray[0]);
                 fileName = sizeArray[1];
@@ -407,7 +403,9 @@ namespace MalnatiProject
             }
             catch (Exception)
             {
-                Disconnetti();
+                if (_dataServer != null)
+                    if (_dataServer.Connected)
+                        _dataServer.Close();
                 return;
             }
         }
@@ -420,10 +418,11 @@ namespace MalnatiProject
                 _dataServer.EndConnect(result); //modalita' attiva
 
                 _transferType = "T"; //ipotizzo di trasferire un plain text, in caso negativo lo cambio
-                object emptyClip = null;
+                
                 object plainText = null;
                 object stringObject = null; // Used to store the return value
                 var thread = new Thread(
+
                   () =>
                   {
                       IDataObject dataObject = Clipboard.GetDataObject();
@@ -439,15 +438,8 @@ namespace MalnatiProject
                       }
                       else
                       {
-                          if (Clipboard.GetDataObject() == null)
-                          {
-                              emptyClip = true;
-                          }
-                          else
-                          {
                               plainText = true;
                               stringObject = Clipboard.GetText();
-                          }
                       }
                   });
                 thread.SetApartmentState(ApartmentState.STA);
@@ -459,10 +451,6 @@ namespace MalnatiProject
                 string message = null;
                 string textClipboard = null;
                 
-                if ((bool)emptyClip == true) {
-                    rif.EmptyClipboard();
-                    throw new Exception(); 
-                }
                 if ((bool)plainText)
                 {
                     //message = DoRetrievePlainText((string)stringObject);

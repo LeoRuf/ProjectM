@@ -43,6 +43,7 @@ namespace MalnatiProject
         public MainWindow()
         {
             InitializeComponent();
+            Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 5 });
             dispatcher = Dispatcher.CurrentDispatcher;
             serverList.Add(new ServerWindow("192.168.1.132", 1601, "c"));
             lServers.ItemsSource = serverList;
@@ -75,6 +76,10 @@ namespace MalnatiProject
         {
             Action action = () =>
             {
+                if (text.Length == 0) {
+                    MessageBox.Show("Clipboard vuota!");
+                    return;
+                }
                 Clipboard.SetText(text);
                 MessageBox.Show("Clipboard copiata!");
             };
