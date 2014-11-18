@@ -282,7 +282,8 @@ namespace MalnatiProject
 
         }
 
-        private void grid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+     
+        private void grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             byte[] string_send = Encoding.UTF8.GetBytes("_X" + e.Delta + "_");
             Console.WriteLine(e.Delta.ToString());
@@ -299,6 +300,10 @@ namespace MalnatiProject
             bool isL = false;
             bool isK = false;
 
+            if (e.KeyboardDevice.IsKeyDown(Key.LeftAlt))
+            {
+                e.Handled=true;
+            }
             if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
             {
 
@@ -471,5 +476,7 @@ namespace MalnatiProject
                 rif.Fine(this);
                 return;
             }
+
+           
      }
 }

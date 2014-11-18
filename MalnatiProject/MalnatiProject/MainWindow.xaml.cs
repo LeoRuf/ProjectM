@@ -45,7 +45,7 @@ namespace MalnatiProject
             InitializeComponent();
             Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 5 });
             dispatcher = Dispatcher.CurrentDispatcher;
-            serverList.Add(new ServerWindow("192.168.1.132", 1601, "c"));
+            serverList.Add(new ServerWindow("192.168.1.136", 1601, "c"));
             lServers.ItemsSource = serverList;
             Clipboard.Clear();
       }
