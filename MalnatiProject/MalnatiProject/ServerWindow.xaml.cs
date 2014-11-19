@@ -285,9 +285,19 @@ namespace MalnatiProject
      
         private void grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            byte[] string_send = Encoding.UTF8.GetBytes("_X" + e.Delta + "_");
-            Console.WriteLine(e.Delta.ToString());
-            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            if (e.Delta > 0)
+            {
+                byte[] string_send = Encoding.UTF8.GetBytes("W");
+                Console.WriteLine(e.Delta.ToString());
+                socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            }
+            else {
+
+                byte[] string_send = Encoding.UTF8.GetBytes("P");
+                Console.WriteLine(e.Delta.ToString());
+                socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+            
+            }
             return;
         }
 
@@ -307,9 +317,14 @@ namespace MalnatiProject
             if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
             {
 
-                switch (e.Key)
-                {
-                    case Key.D:
+                //switch (e.Key)
+                //{
+
+                  //  case Key.D:
+                string d = e.Key.ToString();
+                Console.WriteLine(d);
+
+                if(d.Equals(rif.ritornaClient)){
                         Console.WriteLine("D");
                         if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
                             this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
@@ -321,8 +336,11 @@ namespace MalnatiProject
                         this.Hide();
                         rif.Show(); //Serve?
                         isD = true;
-                        break;
-                    case Key.S:
+                        //break;
+                }
+                   // case Key.S:
+                if(d.Equals(rif.cambiaFocus)){
+                
                         Console.WriteLine("S");
                         if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
                             this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
@@ -344,8 +362,10 @@ namespace MalnatiProject
                         rif.Show();
                         this.Hide();
                         isS = true;
-                        break;
-                    case Key.L:
+                        //break;
+                }
+                    //case Key.L:
+                if(d.Equals(rif.copiaClipboard)){
                         Console.WriteLine("L");
                         Thread retrieveThread = new Thread(ftpClient.Retrieve);
                         retrieveThread.Start();
@@ -354,9 +374,11 @@ namespace MalnatiProject
                             this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
                         else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
                             this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
-                            break;
+                          //  break;
+                }
 
-                    case Key.K:
+                    //case Key.K:
+                if (d.Equals(rif.copiaClipboardServer)){
                         Thread copyThread = new Thread(ftpClient.copyToServer);
                         copyThread.Start();
                         isK = true;
@@ -365,12 +387,13 @@ namespace MalnatiProject
                         else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
                             this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
                             
-                        break;
+                       // break;
+                }
                     //default:
                       //  Console.WriteLine("Default case");
                         //break;
 
-                }
+                
             }
 
 
@@ -407,6 +430,8 @@ namespace MalnatiProject
                         else
                         {
                             Console.WriteLine("Down: " + e.Key.ToString());
+                            //Console.WriteLine("Down: " + Key.D);
+
                             int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
                             Console.WriteLine("Down: " + valore.ToString() + "\n");
                             byte[] string_send = Encoding.UTF8.GetBytes("_X" + valore.ToString() + "_");

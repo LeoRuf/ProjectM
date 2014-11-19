@@ -62,10 +62,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="FtpClient.cs" />
+    <Compile Include="HotKey.xaml.cs">
+      <DependentUpon>HotKey.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ServerWindow.xaml.cs">
       <DependentUpon>ServerWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="AddServer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HotKey.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
