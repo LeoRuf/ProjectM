@@ -42,6 +42,7 @@ namespace MalnatiProject
          public string ritornaClient = "D";
          public string copiaClipboard = "L";
          public string copiaClipboardServer = "K";
+        
 
 
         public MainWindow()
@@ -243,7 +244,8 @@ namespace MalnatiProject
                 window.l2.Content = "CTRL + " + ritornaClient;
                 window.l3.Content = "CTRL + " + copiaClipboard;
                 window.l4.Content = "CTRL + " + copiaClipboardServer;
-
+                byte[] string_send = Encoding.UTF8.GetBytes("_XA_");
+                window.socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, ServerWindow.BeginSendCallback, window.socket);
                 window.Show();
             };
 

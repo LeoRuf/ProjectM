@@ -13,26 +13,26 @@
         <Label x:Name="l1"  Height="26" Width="120" Content="Cambia focus: " FontSize="14" Background="Transparent" FontStyle="Italic" />
         <StackPanel Orientation="Horizontal">
 
-            <Label  Height="28"  BorderThickness="1"  Content="          CTRL +"  Width="120"  FontWeight="Bold" FontStyle="Italic" />
+            <Label  Height="28"  BorderThickness="1"  Content="                          CTRL +"  Width="120"  FontWeight="Bold" FontStyle="Italic" FontSize="10" />
             <TextBox  Name="t1" BorderBrush="#FF0C0B0B" Width="60"  Height="26" Text="S" Background="#FFEFF1AF" FontWeight="Bold" BorderThickness="0"/>
         </StackPanel>
 
         <Label  Height="26" Width="120" Content="Ritorna al client:"  FontSize="14" FontStyle="Italic"/>
         <StackPanel Orientation="Horizontal">
 
-            <Label  Height="28"  BorderThickness="1" Content="          CTRL +"  Width="120"  FontWeight="Bold"  FontStyle="Italic"/>
+            <Label  Height="28"  BorderThickness="1" Content="                          CTRL +"  Width="120"  FontWeight="Bold"  FontStyle="Italic" FontSize="10"/>
             <TextBox Width="60" BorderBrush="#FF0C0B0B" Height="26" Text="D" Name="t2" Background="#FFE4E6A0" FontWeight="Bold" BorderThickness="0"/>
         </StackPanel>
         <Label  Height="26" Width="120" Content="Copia Clipboard:"  FontSize="14" FontStyle="Italic"/>
         <StackPanel Orientation="Horizontal">
-            <Label  Height="28"   Content="          CTRL +" BorderThickness="1"   Width="120" FontWeight="Bold"  FontStyle="Italic" RenderTransformOrigin="1.11,2.867"/>
+            <Label  Height="28"   Content="                          CTRL +" BorderThickness="1"   Width="120" FontWeight="Bold"  FontStyle="Italic" RenderTransformOrigin="1.11,2.867" FontSize="10"/>
             <TextBox Width="60" BorderBrush="#FF0C0B0B" Height="26" Text="L" Name="t3" Background="#FFE4E099" FontWeight="Bold" BorderThickness="0"/>
 
         </StackPanel>
         <Label  Height="26" Content="                 Copia Clipboard nel server"  FontSize="14" FontStyle="Italic" />
         <StackPanel Orientation="Horizontal">
 
-            <Label  Height="29"  Content="          CTRL +" BorderThickness="1"   Width="120" FontWeight="Bold"  FontStyle="Italic" RenderTransformOrigin="1.11,2.867"/>
+            <Label  Height="29"  Content="                          CTRL +" BorderThickness="1"   Width="120" FontWeight="Bold"  FontStyle="Italic" RenderTransformOrigin="1.11,2.867" FontSize="10"/>
             <TextBox Width="60" BorderBrush="#FF0C0B0B" Height="26" Text="K" Name="t4" Background="#FFEAE3A1" FontWeight="Bold" BorderThickness="0"/>
 
         </StackPanel>

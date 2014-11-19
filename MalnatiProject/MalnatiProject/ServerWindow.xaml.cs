@@ -316,7 +316,7 @@ namespace MalnatiProject
             }
             if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
             {
-
+                byte[] string_send;
                 //switch (e.Key)
                 //{
 
@@ -334,6 +334,8 @@ namespace MalnatiProject
                         this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.D));
 
                         this.Hide();
+                        string_send = Encoding.UTF8.GetBytes("_XI_");
+                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
                         rif.Show(); //Serve?
                         isD = true;
                         //break;
@@ -347,18 +349,20 @@ namespace MalnatiProject
                         else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
                             this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
                         this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.S));
-
+                        
                         foreach (ServerWindow ser in rif.serverList)
                         {
                             if (rif.serverList.IndexOf(this) < rif.serverList.IndexOf(ser) && ser.socket != null && ser.Connesso == true)
                             {
-
+                                string_send = Encoding.UTF8.GetBytes("_XI_");
+                                socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
                                 rif.Change_Focus(ser);
                                 boss = false;
                                 break;
                             }
                         }
-
+                        string_send = Encoding.UTF8.GetBytes("_XI_");
+                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
                         rif.Show();
                         this.Hide();
                         isS = true;
