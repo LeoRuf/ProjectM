@@ -33,7 +33,7 @@ namespace MalnatiProject
 
         public MainWindow rif;
         public static ManualResetEvent allDone = new ManualResetEvent(false);
-        
+
 
         bool connesso = false;
         public bool boss = false;
@@ -58,13 +58,13 @@ namespace MalnatiProject
         public ServerWindow(String ip, Int16 porta, String password)
         {
             InitializeComponent();
-            
+
             this.ip = ip;
             this.porta = porta;
             this.password = password;
             ftpClient = new FtpClient(porta, IPAddress.Parse(ip));
-             
- }
+
+        }
 
         public String ToString()
         {
@@ -91,10 +91,11 @@ namespace MalnatiProject
                 socket.ReceiveTimeout = 50000;
                 socket.Receive(rec);
                 string pwdAns = Encoding.UTF8.GetString(rec);
-               // if (true) { }
-                if (Encoding.UTF8.GetString(rec).Trim('\0').Equals(password)) {
-                   Console.WriteLine("Password corretta");
-                 }
+                // if (true) { }
+                if (Encoding.UTF8.GetString(rec).Trim('\0').Equals(password))
+                {
+                    Console.WriteLine("Password corretta");
+                }
                 else
                 {
                     MessageBox.Show("Password errata");
@@ -116,9 +117,9 @@ namespace MalnatiProject
 
                         //per la cirlce progress bar
                         //Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 5 });
-       
+
                         connesso = true;
-                        ftpClient.setRif(rif,this);
+                        ftpClient.setRif(rif, this);
                         rif.Change_Focus(this);
                     }
                     else
@@ -282,7 +283,7 @@ namespace MalnatiProject
 
         }
 
-     
+
         private void grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (e.Delta > 0)
@@ -291,12 +292,13 @@ namespace MalnatiProject
                 Console.WriteLine(e.Delta.ToString());
                 socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
             }
-            else {
+            else
+            {
 
                 byte[] string_send = Encoding.UTF8.GetBytes("P");
                 Console.WriteLine(e.Delta.ToString());
                 socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-            
+
             }
             return;
         }
@@ -312,7 +314,7 @@ namespace MalnatiProject
 
             if (e.KeyboardDevice.IsKeyDown(Key.LeftAlt))
             {
-                e.Handled=true;
+                e.Handled = true;
             }
             if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
             {
@@ -320,84 +322,91 @@ namespace MalnatiProject
                 //switch (e.Key)
                 //{
 
-                  //  case Key.D:
+                //  case Key.D:
                 string d = e.Key.ToString();
                 Console.WriteLine(d);
 
-                if(d.Equals(rif.ritornaClient)){
-                        Console.WriteLine("D");
-                        if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
-                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
-                        else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
+                if (d.Equals(rif.ritornaClient))
+                {
+                    Console.WriteLine(d);
+                    if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
+                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
+                    else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
 
-                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.D));
+                    this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.D));
 
-                        this.Hide();
-                        string_send = Encoding.UTF8.GetBytes("_XI_");
-                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                        rif.Show(); //Serve?
-                        isD = true;
-                        //break;
+                    this.Hide();
+                    string_send = Encoding.UTF8.GetBytes("_XI_");
+                    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    rif.Show(); //Serve?
+                    isD = true;
+                    //break;
                 }
-                   // case Key.S:
-                if(d.Equals(rif.cambiaFocus)){
-                
-                        Console.WriteLine("S");
-                        if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
-                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
-                        else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
-                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.S));
-                        
-                        foreach (ServerWindow ser in rif.serverList)
+                // case Key.S:
+                Console.WriteLine(d);
+                Console.WriteLine(rif.cambiaFocus);
+
+                if (d.Equals(rif.cambiaFocus))
+                {
+
+                    Console.WriteLine(d);
+                    if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
+                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
+                    else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
+                    this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.S));
+
+                    foreach (ServerWindow ser in rif.serverList)
+                    {
+                        if (rif.serverList.IndexOf(this) < rif.serverList.IndexOf(ser) && ser.socket != null && ser.Connesso == true)
                         {
-                            if (rif.serverList.IndexOf(this) < rif.serverList.IndexOf(ser) && ser.socket != null && ser.Connesso == true)
-                            {
-                                string_send = Encoding.UTF8.GetBytes("_XI_");
-                                socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                                rif.Change_Focus(ser);
-                                boss = false;
-                                break;
-                            }
+                            string_send = Encoding.UTF8.GetBytes("_XI_");
+                            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                            rif.Change_Focus(ser);
+                            boss = false;
+                            break;
                         }
-                        string_send = Encoding.UTF8.GetBytes("_XI_");
-                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                        rif.Show();
-                        this.Hide();
-                        isS = true;
-                        //break;
+                    }
+                    string_send = Encoding.UTF8.GetBytes("_XI_");
+                    socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    rif.Show();
+                    this.Hide();
+                    isS = true;
+                    //break;
                 }
-                    //case Key.L:
-                if(d.Equals(rif.copiaClipboard)){
-                        Console.WriteLine("L");
-                        Thread retrieveThread = new Thread(ftpClient.Retrieve);
-                        retrieveThread.Start();
-                        isL = true;
-                        if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
-                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
-                        else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
-                          //  break;
+                //case Key.L:
+                if (d.Equals(rif.copiaClipboard))
+                {
+                    Console.WriteLine(d);
+                    Thread retrieveThread = new Thread(ftpClient.Retrieve);
+                    retrieveThread.Start();
+                    isL = true;
+                    if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
+                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
+                    else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
+                    //  break;
                 }
 
-                    //case Key.K:
-                if (d.Equals(rif.copiaClipboardServer)){
-                        Thread copyThread = new Thread(ftpClient.copyToServer);
-                        copyThread.Start();
-                        isK = true;
-                        if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
-                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
-                        else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                            this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
-                            
-                       // break;
-                }
-                    //default:
-                      //  Console.WriteLine("Default case");
-                        //break;
+                //case Key.K:
+                if (d.Equals(rif.copiaClipboardServer))
+                {
+                    Thread copyThread = new Thread(ftpClient.copyToServer);
+                    copyThread.Start();
+                    isK = true;
+                    if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
+                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.LeftCtrl));
+                    else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                        this.Grid_KeyUp(this, new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, Key.RightCtrl));
 
-                
+                    // break;
+                }
+                //default:
+                //  Console.WriteLine("Default case");
+                //break;
+
+
             }
 
 
@@ -418,42 +427,42 @@ namespace MalnatiProject
 
 
             //}
-            
-                try
+
+            try
+            {
+                if (isD == false && isS == false && isL == false && isK == false)
                 {
-                    if (isD == false && isS == false && isL == false && isK == false)
+                    if (e.Key.ToString() == "System")
                     {
-                        if (e.Key.ToString() == "System")
-                        {
-                            Console.WriteLine("Down: " + e.SystemKey.ToString());
-                            int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.SystemKey).ToString());
-                            Console.WriteLine("Down: " + valore.ToString() + "\n");
-                            byte[] string_send = Encoding.UTF8.GetBytes("_X" + valore.ToString() + "_");
-                            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Down: " + e.Key.ToString());
-                            //Console.WriteLine("Down: " + Key.D);
-
-                            int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
-                            Console.WriteLine("Down: " + valore.ToString() + "\n");
-                            byte[] string_send = Encoding.UTF8.GetBytes("_X" + valore.ToString() + "_");
-                            socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                        }
+                        Console.WriteLine("Down: " + e.SystemKey.ToString());
+                        int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.SystemKey).ToString());
+                        Console.WriteLine("Down: " + valore.ToString() + "\n");
+                        byte[] string_send = Encoding.UTF8.GetBytes("_X" + valore.ToString() + "_");
+                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
                     }
+                    else
+                    {
+                        Console.WriteLine("Down: " + e.Key.ToString());
+                        //Console.WriteLine("Down: " + Key.D);
 
-
+                        int valore = Convert.ToInt32(KeyInterop.VirtualKeyFromKey(e.Key).ToString());
+                        Console.WriteLine("Down: " + valore.ToString() + "\n");
+                        byte[] string_send = Encoding.UTF8.GetBytes("_X" + valore.ToString() + "_");
+                        socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
+                    }
                 }
-                catch (SocketException)
-                {
-                    MessageBox.Show("Connessione caduta");
-                    this.Hide();
-                    this.Disconnetti();
-                    rif.master.Children.Clear();
 
-                }
-            
+
+            }
+            catch (SocketException)
+            {
+                MessageBox.Show("Connessione caduta");
+                this.Hide();
+                this.Disconnetti();
+                rif.master.Children.Clear();
+
+            }
+
 
         }
 
@@ -469,7 +478,7 @@ namespace MalnatiProject
                     Console.WriteLine("Up: " + valore.ToString() + "\n");
                     byte[] string_send = Encoding.UTF8.GetBytes("_Y" + valore.ToString() + "_");
                     socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                    
+
                 }
                 else
                 {
@@ -478,7 +487,7 @@ namespace MalnatiProject
                     Console.WriteLine("Up: " + valore.ToString() + "\n");
                     byte[] string_send = Encoding.UTF8.GetBytes("_Y" + valore.ToString() + "_");
                     socket.BeginSend(string_send, 0, string_send.Length, SocketFlags.None, BeginSendCallback, socket);
-                   
+
                 }
             }
             catch (SocketException)
@@ -496,16 +505,18 @@ namespace MalnatiProject
         }
 
 
-            public void inCorso(bool set) {
-                rif.Inizio(this, set);
-                return;
-           }
+        public void inCorso(bool set)
+        {
+            rif.Inizio(this, set);
+            return;
+        }
 
-            public void fineTrasferimento(){
-                rif.Fine(this);
-                return;
-            }
+        public void fineTrasferimento()
+        {
+            rif.Fine(this);
+            return;
+        }
 
-           
-     }
+
+    }
 }

@@ -14,7 +14,7 @@
         <StackPanel Orientation="Horizontal">
 
             <Label  Height="28"  BorderThickness="1"  Content="                          CTRL +"  Width="120"  FontWeight="Bold" FontStyle="Italic" FontSize="10" />
-            <TextBox  Name="t1" BorderBrush="#FF0C0B0B" Width="60"  Height="26" Text="S" Background="#FFEFF1AF" FontWeight="Bold" BorderThickness="0"/>
+            <TextBox  Name="t1" BorderBrush="#FF0C0B0B" Width="60"  Height="26" Text="P" Background="#FFEFF1AF" FontWeight="Bold" BorderThickness="0"/>
         </StackPanel>
 
         <Label  Height="26" Width="120" Content="Ritorna al client:"  FontSize="14" FontStyle="Italic"/>

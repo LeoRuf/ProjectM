@@ -20,24 +20,30 @@ namespace MalnatiProject
     public partial class HotKey : Window
     {
 
-      
+
         MainWindow rif;
-       
+
         public HotKey(MainWindow m)
         {
             InitializeComponent();
-             rif = m;
-             t1.Text =rif.cambiaFocus;
-             t2.Text = rif.ritornaClient;
-             t3.Text = rif.copiaClipboard;
-             t4.Text = rif.copiaClipboardServer;
+            rif = m;
+            t1.Text = rif.cambiaFocus;
+            t2.Text = rif.ritornaClient;
+            t3.Text = rif.copiaClipboard;
+            t4.Text = rif.copiaClipboardServer;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            if (t1.Text.Length == 1 && t1.Text != "C" && t1.Text != "V" && t1.Text != "Z" && t1.Text != "X" && ((t1.Text[0] >= 0x30 && t1.Text[0] <= 0x39) || (t1.Text[0] >= 0x61 && t1.Text[0] <= 0x7A) || (t1.Text[0] >= 0x41 && t1.Text[0] <= 0x5A)))
+            if (t1.Text.Length == 1 && t1.Text.ToUpperInvariant() != "C" && t1.Text.ToUpperInvariant() != "V" && t1.Text.ToUpperInvariant() != "Z" && t1.Text.ToUpperInvariant() != "S" && t1.Text.ToUpperInvariant() != "X" && ((t1.Text[0] >= 0x61 && t1.Text[0] <= 0x7A) || (t1.Text[0] >= 0x41 && t1.Text[0] <= 0x5A)))
             {
+                if (t1.Text.ToUpperInvariant().Equals(t2.Text.ToUpperInvariant()) || t1.Text.ToUpperInvariant().Equals(t3.Text.ToUpperInvariant()) || t1.Text.ToUpperInvariant().Equals(t4.Text.ToUpperInvariant()))
+                {
+                    MessageBox.Show("Hotkey già esistente!");
+                    return;
+                }
+
                 rif.cambiaFocus = t1.Text.ToUpperInvariant();
 
             }
@@ -47,8 +53,14 @@ namespace MalnatiProject
                 return;
             }
 
-            if (t2.Text.Length == 1 && t2.Text != "C" && t2.Text != "V" && t2.Text != "Z" && t2.Text != "X" && ((t2.Text[0] >= 0x30 && t2.Text[0] <= 0x39) || (t2.Text[0] >=0x61 && t2.Text[0] <= 0x7A) || (t2.Text[0] >= 0x41 && t2.Text[0] <= 0x5A)))
+            if (t2.Text.Length == 1 && t2.Text.ToUpperInvariant() != "C" && t2.Text.ToUpperInvariant() != "V" && t2.Text.ToUpperInvariant() != "Z" && t2.Text.ToUpperInvariant() != "X" && t2.Text.ToUpperInvariant() != "S" && ((t2.Text[0] >= 0x61 && t2.Text[0] <= 0x7A) || (t2.Text[0] >= 0x41 && t2.Text[0] <= 0x5A)))
             {
+                if ((t2.Text).ToUpperInvariant().Equals(t1.Text.ToUpperInvariant()) || t2.Text.ToUpperInvariant().Equals(t3.Text.ToUpperInvariant()) || t2.Text.ToUpperInvariant().Equals(t4.Text.ToUpperInvariant()))
+                {
+                    MessageBox.Show("Hotkey già esistente!");
+                    return;
+                }
+
                 rif.ritornaClient = t2.Text.ToUpperInvariant();
             }
             else
@@ -57,9 +69,15 @@ namespace MalnatiProject
                 return;
             }
 
-            if (t3.Text.Length == 1 && t3.Text != "C" && t3.Text != "V" && t3.Text != "Z" && t3.Text != "X" && ((t3.Text[0] >= 0x30 && t3.Text[0] <= 0x39) || (t3.Text[0] >= 0x61 && t3.Text[0] <= 0x7A) || (t3.Text[0] >= 0x41 && t3.Text[0] <= 0x5A)))
+            if (t3.Text.Length == 1 && t3.Text.ToUpperInvariant() != "C" && t3.Text.ToUpperInvariant() != "V" && t3.Text.ToUpperInvariant() != "Z" && t3.Text.ToUpperInvariant() != "X" && t3.Text.ToUpperInvariant() != "S" && ((t3.Text[0] >= 0x61 && t3.Text[0] <= 0x7A) || (t3.Text[0] >= 0x41 && t3.Text[0] <= 0x5A)))
             {
-                rif.copiaClipboard = t3.Text.ToUpperInvariant();
+                if ((t3.Text).ToUpperInvariant().Equals(t1.Text.ToUpperInvariant()) || t3.Text.ToUpperInvariant().Equals(t2.Text.ToUpperInvariant()) || t3.Text.ToUpperInvariant().Equals(t4.Text.ToUpperInvariant()))
+                {
+                    MessageBox.Show("Hotkey già esistente!");
+                    return;
+                }
+
+                rif.copiaClipboard= t3.Text.ToUpperInvariant();
             }
             else
             {
@@ -67,8 +85,14 @@ namespace MalnatiProject
                 return;
             }
 
-            if (t4.Text.Length == 1 && t4.Text != "C" && t4.Text != "V" && t4.Text != "Z" && t4.Text != "X" && ((t4.Text[0] >= 0x30 && t4.Text[0] <= 0x39) || (t4.Text[0] >= 0x61 && t4.Text[0] <= 0x7A) || (t4.Text[0] >= 0x41 && t4.Text[0] <= 0x5A)))
+            if (t4.Text.Length == 1 && t4.Text.ToUpperInvariant() != "C" && t4.Text.ToUpperInvariant() != "V" && t4.Text.ToUpperInvariant() != "Z" && t4.Text.ToUpperInvariant() != "X" && t4.Text.ToUpperInvariant() != "S" && ((t4.Text[0] >= 0x61 && t4.Text[0] <= 0x7A) || (t4.Text[0] >= 0x41 && t4.Text[0] <= 0x5A)))
             {
+                if ((t4.Text).ToUpperInvariant().Equals(t1.Text.ToUpperInvariant()) || t4.Text.ToUpperInvariant().Equals(t2.Text.ToUpperInvariant()) || t4.Text.ToUpperInvariant().Equals(t3.Text.ToUpperInvariant()))
+                {
+                    MessageBox.Show("Hotkey già esistente!");
+                    return;
+                }
+
                 rif.copiaClipboardServer = t4.Text.ToUpperInvariant();
             }
             else
@@ -81,6 +105,6 @@ namespace MalnatiProject
 
         }
 
-      
+
     }
 }

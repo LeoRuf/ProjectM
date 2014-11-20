@@ -38,7 +38,7 @@ namespace MalnatiProject
         bool cancella_premuto = false;
         bool isFTPConnesso = false;
 
-         public string cambiaFocus = "S";
+         public string cambiaFocus = "P";
          public string ritornaClient = "D";
          public string copiaClipboard = "L";
          public string copiaClipboardServer = "K";
@@ -48,11 +48,11 @@ namespace MalnatiProject
         public MainWindow()
         {
             InitializeComponent();
-            Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 5 });
+            Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 10 });
             dispatcher = Dispatcher.CurrentDispatcher;
-            serverList.Add(new ServerWindow("192.168.1.133", 1601, "c"));
+            serverList.Add(new ServerWindow("192.168.1.139", 1601, "c"));
             lServers.ItemsSource = serverList;
-            Clipboard.Clear();
+            
       }
 
         private void aggiungi_button_Click(object sender, RoutedEventArgs e)
@@ -372,5 +372,14 @@ namespace MalnatiProject
             HotKey hk = new HotKey(this);
             hk.Show();
         }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            foreach (ServerWindow serv in serverList) {
+                serv.Disconnetti();
+            }
+        }
+
+
     }
 }

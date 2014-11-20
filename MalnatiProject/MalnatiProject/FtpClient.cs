@@ -237,7 +237,9 @@ namespace MalnatiProject
                         dataStreamW.WriteLine("go");
                         dataStreamW.Flush();
                     }
-
+                    if (!Directory.Exists("C:\\temp")) {
+                        Directory.CreateDirectory("C:\\temp");
+                    }
                     filePath = "C:\\temp\\" + fileName; //path al file di destinazione in temp (file o cartella comp)
                     if (File.Exists(filePath))
                     {
@@ -268,15 +270,27 @@ namespace MalnatiProject
 
                     if (isDir)
                     {
+                        string nome_dir =null;
+                        for (int i = 0; i < fileNameArray1.Length-1;i++ )
+                        {
+
+                            if (nome_dir == null)
+                            {
+                                nome_dir = nome_dir + fileNameArray1[i];
+                                continue;
+                            }
+                            nome_dir = nome_dir + "." + fileNameArray1[i];
+                        }
+
                         using (ZipFile zip = ZipFile.Read(filePath))
                         {
-                            if (Directory.Exists("C:\\temp\\" + fileNameArray1[0])) {
-                                DeleteDirectory("C:\\temp\\" + fileNameArray1[0]);
+                               if (Directory.Exists("C:\\temp\\" + nome_dir)) {
+                                DeleteDirectory("C:\\temp\\" + nome_dir);
                             }
-                            Directory.CreateDirectory("C:\\temp\\" + fileNameArray1[0]);
+                            Directory.CreateDirectory("C:\\temp\\" + nome_dir);
                             foreach (ZipEntry e in zip)
                             {
-                                e.Extract("C:\\temp\\" + fileNameArray1[0]);
+                                e.Extract("C:\\temp\\" + nome_dir);
                             }
                         }
                         if (File.Exists(filePath)) //elimino il file compresso ricevuto, ora ho la cartella decompressa
@@ -521,7 +535,13 @@ namespace MalnatiProject
                 FileInfo fInfo = new FileInfo(path);
                 fileName = fInfo.Name;
                 string[] extensionArray = fileName.Split('.');
-                if (extensionArray.Length == 1) //caso di direttorio
+                
+                if (File.Exists(path))
+                {
+                    long size = fInfo.Length;
+                    return size + "!" + fileName;
+                }
+                else // caso di file
                 {
                     //modifico path con il nuovo path al direttorio compresso
                     path = CompressDir(path);
@@ -529,12 +549,7 @@ namespace MalnatiProject
                     fileName = modifiedfInfo.Name; //ritocco fileName con il nome della cartella compressa contenente il direttorio copiato
                     long size = modifiedfInfo.Length;
                     return size + "!dir;" + fileName; //devo informare il client che sto inviando un direttorio sotto forma di file compresso
-                }
-                else // caso di file
-                {
-                    fileExtension = extensionArray[1];
-                    long size = fInfo.Length;
-                    return size + "!" + fileName;
+                
                 }
             }
             catch (Exception)
